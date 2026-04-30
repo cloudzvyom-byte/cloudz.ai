@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+    <meta name="color-scheme" content="dark">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Operon — AI Workforce Platform</title>
+    <meta name="description" content="Operon is your AI-powered workforce platform for managing sales, support, and outreach agents." />
+    
+    <!-- FLICKER FIX -->
+    <style>
+      html, body, #root {
+        background-color: #0A0A0A !important;
+        color: #FFFFFF;
+        margin: 0; padding: 0; min-height: 100vh;
+      }
+    </style>
+
+    <!-- THEME INITIALIZATION -->
+    <script>
+      (function() {
+        const t = localStorage.getItem('operon_theme') || 'orange-black';
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
+
+    <!-- RAZORPAY SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

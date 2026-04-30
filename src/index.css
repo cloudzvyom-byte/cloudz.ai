@@ -1,0 +1,210 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════
+   OPERON DESIGN SYSTEM V2 — CLOUD PEACH-TO-PINK SUNSET
+   ══════════════════════════════════════ */
+
+:root {
+  --radius: 0.75rem;
+  /* Swapped to match user's request for Peach/Golden at the top */
+  --sunset-peach: #FFB3A1;
+  --sunset-horizon: #FFD2B3;
+  --sunset-pink: #FF8BA7;
+  --sunset-purple: #D191E0;
+
+  --background: #FFB3A1;
+  --foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.3);
+  --card: rgba(255, 255, 255, 0.15);
+  --muted-foreground: rgba(255, 255, 255, 0.85);
+  --primary: #ffffff;
+
+  /* Default Dashboard Theme (Orange Black) */
+  --bg-app: #0A0A0A;
+  --bg-sidebar: #0A0A0A;
+  --bg-card: #141414;
+  --bg-input: #1F1F1F;
+  --bg-hover: #262626;
+  --accent: #FF6B1A;
+  --accent-tint: rgba(255, 107, 26, 0.1);
+  --accent-hover: #FF853D;
+  --text-primary: #FFFFFF;
+  --text-secondary: #AAAAAA;
+  --text-muted: #666666;
+  --error: #FF4D4D;
+  --success: #00E676;
+}
+
+[data-theme='orange-black'] {
+  --bg-app: #0A0A0A;
+  --bg-sidebar: #0A0A0A;
+  --bg-card: #141414;
+  --bg-input: #1F1F1F;
+  --bg-hover: #262626;
+  --accent: #FF6B1A;
+  --accent-tint: rgba(255, 107, 26, 0.1);
+  --accent-hover: #FF853D;
+  --text-primary: #FFFFFF;
+  --text-secondary: #AAAAAA;
+  --text-muted: #666666;
+}
+
+[data-theme='navy-beige'] {
+  --bg-app: #0D1B2A;
+  --bg-sidebar: #0D1B2A;
+  --bg-card: #1B263B;
+  --bg-input: #415A77;
+  --bg-hover: #778DA9;
+  --accent: #C8A97E;
+  --accent-tint: rgba(200, 169, 126, 0.1);
+  --accent-hover: #DBC09B;
+  --text-primary: #E0E1DD;
+  --text-secondary: #A0A19D;
+  --text-muted: #70716D;
+}
+
+[data-theme='white-cherry'] {
+  --bg-app: #FAFAFA;
+  --bg-sidebar: #FAFAFA;
+  --bg-card: #FFFFFF;
+  --bg-input: #F3F3F3;
+  --bg-hover: #EBEBEB;
+  --accent: #C41E3A;
+  --accent-tint: rgba(196, 30, 58, 0.05);
+  --accent-hover: #D92546;
+  --text-primary: #1A1A1A;
+  --text-secondary: #4A4A4A;
+  --text-muted: #8A8A8A;
+  --border: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='black-white'] {
+  --bg-app: #000000;
+  --bg-sidebar: #000000;
+  --bg-card: #000000;
+  --bg-input: #111111;
+  --bg-hover: #222222;
+  --accent: #FFFFFF;
+  --accent-tint: rgba(255, 255, 255, 0.1);
+  --accent-hover: #EEEEEE;
+  --text-primary: #FFFFFF;
+  --text-secondary: #AAAAAA;
+  --text-muted: #666666;
+  --border: rgba(255, 255, 255, 0.2);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: linear-gradient(135deg,
+        #FF8BA7 0%,
+        /* Vivid Pink - Top */
+        #FFB3A1 40%,
+        /* Soft Peach */
+        #FFD2B3 70%,
+        /* Peach Horizon */
+        #D191E0 100%
+        /* Soft Purple */
+      );
+    background-attachment: fixed;
+    color: var(--foreground);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+}
+
+.sunset-gradient {
+  background: linear-gradient(135deg,
+      #FF8BA7 0%,
+      #FFB3A1 40%,
+      #FFD2B3 70%,
+      #D191E0 100%);
+}
+
+.glass-effect {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* ══════════════════════════════════════
+   CONTINUOUS CLOUD ANIMATIONS
+   ══════════════════════════════════════ */
+
+@keyframes drift-right {
+  0% {
+    transform: translate3d(-100vw, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(100vw, 0, 0);
+  }
+}
+
+@keyframes drift-left {
+  0% {
+    transform: translate3d(100vw, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-100vw, 0, 0);
+  }
+}
+
+@keyframes float-y {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -30px, 0);
+  }
+}
+
+.cloud-drift-slow {
+  animation: drift-right 160s linear infinite;
+}
+
+.cloud-drift-med {
+  animation: drift-right 110s linear infinite;
+}
+
+.cloud-drift-fast {
+  animation: drift-left 90s linear infinite;
+}
+
+.float-y {
+  animation: float-y 12s ease-in-out infinite;
+}
+
+@keyframes rewrite {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-10px) scale(0.95);
+    filter: blur(4px);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
