@@ -46,18 +46,18 @@ export function Header() {
             ))}
           </nav>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <Link
             to="/login"
-            className="hidden rounded-full px-4 py-2 text-base font-bold text-white hover:text-white/80 sm:inline-block"
+            className="rounded-full px-3 py-2 text-sm font-bold text-white hover:text-white/80"
           >
             Sign in
           </Link>
           <a
             href="#demo"
-            className="rounded-full bg-white text-[#FF8BA7] px-6 py-2.5 text-base font-black shadow-xl transition-all hover-pop"
+            className="rounded-full bg-white text-[#FF8BA7] px-4 py-2 text-sm font-black shadow-lg transition-all hover-pop"
           >
-            Book a demo
+            Book demo
           </a>
         </div>
       </div>
