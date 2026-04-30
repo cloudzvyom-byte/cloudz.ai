@@ -26,16 +26,15 @@ export function Header() {
       }`}
     >
       <div className="flex h-24 w-full items-center justify-between px-4 lg:px-8">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4">
           <Link 
             to="/" 
-            className="flex items-center gap-3 transition-transform hover:scale-105" 
-            aria-label="Operon home"
+            className="flex items-center transition-transform hover:scale-105" 
+            aria-label="Clouds home"
           >
             <OperonLogo className="h-10 w-10 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
-            <span className="text-xl font-black tracking-tighter text-white">OPERON</span>
           </Link>
-          <nav className="hidden items-center gap-6 md:flex">
+          <nav className="hidden items-center gap-6 md:flex ml-4">
             {nav.map((n) => (
               <a
                 key={n.label}

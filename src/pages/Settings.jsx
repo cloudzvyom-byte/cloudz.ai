@@ -118,13 +118,13 @@ const Settings = () => {
                     </div>
                     <div>
                       <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3">Email Vector</label>
-                      <input type="email" placeholder="vyom@operon.ai" className="w-full bg-[var(--bg-input)] border border-[var(--border)] rounded-[14px] px-5 py-3.5 text-sm focus:outline-none focus:border-[var(--accent)] transition-all shadow-inner" />
+                      <input type="email" placeholder="vyom@clouds.ai" className="w-full bg-[var(--bg-input)] border border-[var(--border)] rounded-[14px] px-5 py-3.5 text-sm focus:outline-none focus:border-[var(--accent)] transition-all shadow-inner" />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3">Operational Entity</label>
-                    <input type="text" placeholder="Operon AI Technologies" className="w-full bg-[var(--bg-input)] border border-[var(--border)] rounded-[14px] px-5 py-3.5 text-sm focus:outline-none focus:border-[var(--accent)] transition-all shadow-inner" />
+                    <input type="text" placeholder="Clouds AI Technologies" className="w-full bg-[var(--bg-input)] border border-[var(--border)] rounded-[14px] px-5 py-3.5 text-sm focus:outline-none focus:border-[var(--accent)] transition-all shadow-inner" />
                   </div>
                 </div>
               </section>

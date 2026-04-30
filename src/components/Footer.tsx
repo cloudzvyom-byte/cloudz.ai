@@ -11,7 +11,7 @@ export function Footer() {
         <div className="col-span-2">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-full sky-gradient" />
-            <span className="text-lg font-bold tracking-tight text-black">Operon</span>
+            <span className="text-lg font-bold tracking-tight text-black">Clouds</span>
           </div>
           <p className="mt-4 max-w-sm text-sm text-gray-600">
             The creative OS for modern brands. Built quietly, in the open.
@@ -36,7 +36,7 @@ export function Footer() {
       </div>
       <div className="border-t border-gray-100">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-6 text-xs text-gray-400">
-          <span>© {new Date().getFullYear()} Operon AI Inc.</span>
+          <span>© {new Date().getFullYear()} Clouds AI Inc.</span>
           <div className="flex gap-5">
             <a href="/privacy" className="hover:text-black transition-colors">Privacy</a>
             <a href="/terms" className="hover:text-black transition-colors">Terms</a>
