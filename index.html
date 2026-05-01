@@ -54,17 +54,57 @@
   </head>
   <body>
     <div id="splash-screen">
-      <img src="/logo.svg" id="splash-logo" alt="Clouds AI Logo" />
-      <div style="margin-top: 40px; font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 900; letter-spacing: 0.4em; color: rgba(255,255,255,0.4); text-transform: uppercase;">Initializing System</div>
+      <!-- Premium Animated Globe SVG -->
+      <svg id="splash-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="globe-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FF6B1A;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#FF1A6B;stop-opacity:1" />
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <circle cx="50" cy="50" r="45" fill="none" stroke="url(#globe-grad)" stroke-width="0.5" opacity="0.3" />
+        <circle cx="50" cy="50" r="38" fill="none" stroke="url(#globe-grad)" stroke-width="1.5" filter="url(#glow)" />
+        <path d="M50 12 L50 88 M12 50 L88 50" stroke="url(#globe-grad)" stroke-width="0.5" opacity="0.2">
+          <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite" />
+        </path>
+        <ellipse cx="50" cy="50" rx="38" ry="15" fill="none" stroke="url(#globe-grad)" stroke-width="0.5" opacity="0.3">
+          <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="6s" repeatCount="indefinite" />
+        </ellipse>
+        <ellipse cx="50" cy="50" rx="15" ry="38" fill="none" stroke="url(#globe-grad)" stroke-width="0.5" opacity="0.3">
+          <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="8s" repeatCount="indefinite" />
+        </ellipse>
+      </svg>
+      <div style="margin-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.6em; color: #FFFFFF; text-transform: uppercase;">Initializing Neural Node</div>
+        <div style="width: 140px; h-1px; background: rgba(255,255,255,0.1); position: relative; overflow: hidden; height: 1px;">
+           <div style="position: absolute; inset: 0; background: linear-gradient(90deg, transparent, #FF6B1A, transparent); animation: loading-bar 2s infinite ease-in-out;"></div>
+        </div>
+      </div>
+      <style>
+        @keyframes loading-bar {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+      </style>
     </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     <script>
+      const hideSplash = () => {
+        document.body.classList.add('loaded');
+      };
       window.addEventListener('load', () => {
-        setTimeout(() => {
-          document.body.classList.add('loaded');
-        }, 1500);
+        setTimeout(hideSplash, 1000);
       });
+      // Safety Fallback: Hide splash after 5 seconds no matter what
+      setTimeout(hideSplash, 5000);
     </script>
   </body>
 </html>
