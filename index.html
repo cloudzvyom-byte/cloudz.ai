@@ -54,37 +54,41 @@
   </head>
   <body>
     <div id="splash-screen">
-      <!-- Custom Cloud AI Logo -->
+      <!-- High-Fidelity SVG Recreation of User Logo -->
       <svg id="splash-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="cloud-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#FF6B1A;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#FF1A6B;stop-opacity:1" />
+          <linearGradient id="globe-grad-final" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#FF6B1A;stop-opacity:0.8" />
           </linearGradient>
-          <filter id="cloud-glow">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
+          <filter id="globe-glow">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
             <feMerge>
               <feMergeNode in="blur"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
         </defs>
-        <!-- Minimalist Cloud Shape -->
-        <g>
-          <path d="M25 65 A15 15 0 0 1 25 35 A20 20 0 0 1 65 35 A15 15 0 0 1 65 65 Z" fill="url(#cloud-grad)" />
-          <circle cx="45" cy="40" r="18" fill="url(#cloud-grad)" />
-          <circle cx="65" cy="50" r="15" fill="url(#cloud-grad)" />
-          <circle cx="35" cy="50" r="15" fill="url(#cloud-grad)" />
-          <!-- Connectivity dots -->
-          <circle cx="50" cy="50" r="2" fill="white">
-            <animate attributeName="opacity" values="1;0.2;1" dur="2s" repeatCount="indefinite" />
-          </circle>
+        <g filter="url(#globe-glow)">
+          <!-- Outer Circle -->
+          <circle cx="50" cy="50" r="40" fill="none" stroke="url(#globe-grad-final)" stroke-width="2.5" />
+          
+          <!-- Vertical Ellipses (Longitudes) -->
+          <ellipse cx="50" cy="50" rx="18" ry="40" fill="none" stroke="url(#globe-grad-final)" stroke-width="2" />
+          
+          <!-- Horizontal Line (Equator) -->
+          <line x1="10" y1="50" x2="90" y2="50" stroke="url(#globe-grad-final)" stroke-width="2" />
+          
+          <!-- Diamond Center Fill (Subtle) -->
+          <path d="M50 32 L59 50 L50 68 L41 50 Z" fill="url(#globe-grad-final)" opacity="0.4">
+             <animate attributeName="opacity" values="0.4;0.1;0.4" dur="2s" repeatCount="indefinite" />
+          </path>
         </g>
       </svg>
-      <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 16px;">
-        <div style="font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.3em; color: #FFFFFF; text-transform: uppercase; opacity: 0.8;">Loading...</div>
-        <div style="width: 100px; height: 2px; background: rgba(255,255,255,0.05); position: relative; overflow: hidden; border-radius: 10px;">
-           <div style="position: absolute; inset: 0; background: linear-gradient(90deg, transparent, #FF6B1A, transparent); animation: loading-bar 1.5s infinite linear;"></div>
+      <div style="margin-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+        <div style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: 0.4em; color: #FFFFFF; text-transform: uppercase; opacity: 0.6;">Loading...</div>
+        <div style="width: 120px; height: 1px; background: rgba(255,255,255,0.05); position: relative; overflow: hidden;">
+           <div style="position: absolute; inset: 0; background: linear-gradient(90deg, transparent, #FF6B1A, transparent); animation: loading-bar 2s infinite linear;"></div>
         </div>
       </div>
       <style>
@@ -93,13 +97,13 @@
           100% { transform: translateX(100%); }
         }
         #splash-logo {
-          width: 120px;
-          height: 120px;
-          animation: float-cloud 3s ease-in-out infinite;
+          width: 100px;
+          height: 100px;
+          animation: logo-pulse 3s ease-in-out infinite;
         }
-        @keyframes float-cloud {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
+        @keyframes logo-pulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.05); opacity: 0.8; }
         }
       </style>
     </div>
