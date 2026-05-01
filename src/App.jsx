@@ -31,28 +31,7 @@ import { SmoothScroll } from './components/SmoothScroll';
 import { ShieldAlert } from 'lucide-react';
 
 const ProtectedRoute = ({ children, session, isBlocked }) => {
-  if (!session) return <Navigate to="/login" replace />;
-  if (isBlocked) return (
-    <div className="h-screen w-full bg-[#0A0A0A] flex flex-col items-center justify-center font-sans tracking-tight text-white p-10 text-center">
-      <div className="w-20 h-20 bg-red-500/10 border border-red-500/20 rounded-[28px] flex items-center justify-center mb-8 animate-pulse">
-        <ShieldAlert size={40} className="text-red-500" />
-      </div>
-      <h1 className="text-3xl font-medium tracking-tight mb-4">Access <span className="text-red-500">Restricted</span>.</h1>
-      <p className="text-gray-400 text-base max-w-sm leading-relaxed mb-10">
-        Your neural node authorization has been suspended. This usually occurs due to an outstanding subscription or a protocol violation.
-      </p>
-      <div className="space-y-4">
-        <button onClick={() => window.location.href = 'mailto:support@operon.ai'} className="px-10 py-4 bg-white text-black rounded-full text-xs font-black uppercase tracking-widest hover:bg-gray-200 transition-all">
-          Contact Support
-        </button>
-        <div className="pt-8 border-t border-white/5">
-          <button onClick={() => supabase.auth.signOut()} className="text-[10px] font-black text-gray-500 uppercase tracking-widest hover:text-white transition-all">
-            Sign Out
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  if (!session || !session.user) return <Navigate to="/login" replace />;
   return <DashboardLayout user={session.user}>{children}</DashboardLayout>;
 };
 
@@ -69,12 +48,10 @@ function App() {
       if (mounted) setAuthLoading(false);
     }, 500);
 
-    const handleAuthState = async (event, currentSession) => {
+    const handleAuthState = (event, currentSession) => {
       if (mounted) {
         setSession(currentSession);
-        // Skip profile check to speed up launch
         setAuthLoading(false);
-        clearTimeout(failSafeTimer);
       }
     };
 
