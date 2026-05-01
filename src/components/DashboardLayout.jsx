@@ -143,11 +143,14 @@ const DashboardLayout = ({ children, user }) => {
       )}
 
       {/* SIDEBAR */}
-      <aside className={`flex-shrink-0 bg-[var(--bg-sidebar)] border-r border-[var(--border)] flex flex-col h-full z-20 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${sidebarCollapsed ? 'w-0 -translate-x-full' : 'w-[240px] translate-x-0'}`}>
-        <div className="px-8 py-10">
+      {/* SIDEBAR */}
+      <aside className={`flex-shrink-0 bg-[var(--bg-sidebar)] border-r border-[var(--border)] flex flex-col h-full z-20 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] overflow-hidden ${sidebarCollapsed ? 'w-[80px]' : 'w-[240px]'}`}>
+        <div className={`py-10 transition-all duration-500 ${sidebarCollapsed ? 'px-0 flex justify-center' : 'px-8'}`}>
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/dashboard')}>
             <OperonLogo size={24} />
-            <span className="text-lg font-bold tracking-tight text-white group-hover:text-[var(--accent)] transition-colors">Cloud AI</span>
+            {!sidebarCollapsed && (
+              <span className="text-lg font-bold tracking-tight text-white group-hover:text-[var(--accent)] transition-colors whitespace-nowrap">Cloud AI</span>
+            )}
           </div>
         </div>
 
@@ -212,7 +215,8 @@ const DashboardLayout = ({ children, user }) => {
                   <NavLink
                     to={item.path}
                     className={({ isActive }) => `
-                      flex items-center gap-4 px-4 py-3.5 rounded-[10px] text-[14px] font-medium transition-all duration-200 relative group hover-pop
+                      flex items-center rounded-[10px] text-[14px] font-medium transition-all duration-200 relative group hover-pop
+                      ${sidebarCollapsed ? 'justify-center py-4 px-0' : 'gap-4 px-4 py-3.5'}
                       ${isActive 
                         ? 'bg-[var(--accent-tint)] text-[var(--accent)] shadow-lg shadow-[var(--accent-tint)]' 
                         : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-white'
@@ -221,9 +225,9 @@ const DashboardLayout = ({ children, user }) => {
                   >
                     {({ isActive }) => (
                       <>
-                        {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[var(--accent)] rounded-r-full" />}
+                        {isActive && !sidebarCollapsed && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[var(--accent)] rounded-r-full" />}
                         <item.icon size={20} className={isActive ? 'text-[var(--accent)]' : 'text-[var(--text-muted)] group-hover:text-white transition-colors'} />
-                        <span className="tracking-tight">{item.name}</span>
+                        {!sidebarCollapsed && <span className="tracking-tight whitespace-nowrap">{item.name}</span>}
                       </>
                     )}
                   </NavLink>
@@ -233,27 +237,39 @@ const DashboardLayout = ({ children, user }) => {
           })}
         </nav>
 
-        <div className="p-4 mt-auto border-t border-[var(--border)]">
-          <div className="flex items-center gap-3 p-3 rounded-[14px] bg-[var(--bg-card)] border border-[var(--border)]">
-            <div className="w-11 h-11 rounded-full bg-[var(--bg-input)] border border-[var(--border)] overflow-hidden flex-shrink-0">
+        <div className={`mt-auto border-t border-[var(--border)] transition-all duration-500 ${sidebarCollapsed ? 'p-2' : 'p-4'}`}>
+          <div className={`flex items-center rounded-[14px] bg-[var(--bg-card)] border border-[var(--border)] ${sidebarCollapsed ? 'flex-col gap-2 p-2' : 'gap-3 p-3'}`}>
+            <div className="w-10 h-10 rounded-full bg-[var(--bg-input)] border border-[var(--border)] overflow-hidden flex-shrink-0">
               {user?.user_metadata?.avatar_url ? (
                 <img src={user.user_metadata.avatar_url} alt="" className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-[var(--text-muted)]">
-                  <User size={20} />
+                  <User size={18} />
                 </div>
               )}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[12px] font-bold truncate text-white">{user?.user_metadata?.full_name || user?.email?.split('@')[0]}</p>
+            {!sidebarCollapsed && (
+              <div className="flex-1 min-w-0">
+                <p className="text-[12px] font-bold truncate text-white">{user?.user_metadata?.full_name || user?.email?.split('@')[0]}</p>
+                <button 
+                  onClick={handleLogout} 
+                  disabled={loggingOut}
+                  className="text-[10px] font-black text-[var(--text-muted)] hover:text-[var(--error)] transition-colors uppercase tracking-[0.2em] mt-1 py-1 px-0.5 inline-block relative z-50 cursor-pointer disabled:opacity-50"
+                >
+                  {loggingOut ? 'Signing Out...' : 'Sign Out'}
+                </button>
+              </div>
+            )}
+            {sidebarCollapsed && (
               <button 
-                onClick={handleLogout} 
+                onClick={handleLogout}
                 disabled={loggingOut}
-                className="text-[10px] font-black text-[var(--text-muted)] hover:text-[var(--error)] transition-colors uppercase tracking-[0.2em] mt-1 py-1 px-0.5 inline-block relative z-50 cursor-pointer disabled:opacity-50"
+                className="text-[var(--text-muted)] hover:text-[var(--error)] transition-colors p-1"
+                title="Sign Out"
               >
-                {loggingOut ? 'Signing Out...' : 'Sign Out'}
+                <LogOut size={16} />
               </button>
-            </div>
+            )}
           </div>
         </div>
       </aside>
