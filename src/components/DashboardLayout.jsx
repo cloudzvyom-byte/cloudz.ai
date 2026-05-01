@@ -10,7 +10,7 @@ import {
   LogOut, Search, User, ChevronRight, Zap,
   Activity, Sparkles, Command, Check, X, Clock,
   Newspaper, Info, ArrowRight, ExternalLink,
-  MessageSquare
+  MessageSquare, PanelLeftClose, PanelLeft
 } from 'lucide-react';
 
 /* ─── Operon Logo ────────────────────────────────────────────────── */
@@ -29,6 +29,7 @@ const DashboardLayout = ({ children, user }) => {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [salesDialerOpen, setSalesDialerOpen] = useState(false);
   const [supportOpen, setSupportOpen] = useState(true);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   
   const location = useLocation();
@@ -142,7 +143,7 @@ const DashboardLayout = ({ children, user }) => {
       )}
 
       {/* SIDEBAR */}
-      <aside className="w-[240px] flex-shrink-0 bg-[var(--bg-sidebar)] border-r border-[var(--border)] flex flex-col h-full z-20">
+      <aside className={`flex-shrink-0 bg-[var(--bg-sidebar)] border-r border-[var(--border)] flex flex-col h-full z-20 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${sidebarCollapsed ? 'w-0 -translate-x-full' : 'w-[240px] translate-x-0'}`}>
         <div className="px-8 py-10">
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/dashboard')}>
             <OperonLogo size={24} />
@@ -262,9 +263,18 @@ const DashboardLayout = ({ children, user }) => {
         
         {/* TOP HEADER */}
         <header className="h-20 flex-shrink-0 flex items-center justify-between px-10 border-b border-[var(--border)]/50">
-          <h2 className="text-base font-medium text-white tracking-tight">
-            {NAV_ITEMS.find(i => i.path === location.pathname)?.name || 'Dashboard'}
-          </h2>
+          <div className="flex items-center gap-6">
+            <button 
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="w-10 h-10 flex items-center justify-center rounded-[12px] bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-muted)] hover:text-white hover:border-[var(--accent)] transition-all shadow-sm"
+              title={sidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+            >
+              {sidebarCollapsed ? <PanelLeft size={20} /> : <PanelLeftClose size={20} />}
+            </button>
+            <h2 className="text-base font-medium text-white tracking-tight">
+              {NAV_ITEMS.find(i => i.path === location.pathname)?.name || 'Dashboard'}
+            </h2>
+          </div>
 
           <div className="flex items-center gap-4">
             <div className="relative group">
