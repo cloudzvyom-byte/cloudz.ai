@@ -90,22 +90,29 @@ function App() {
   }, []);
 
   return (
-    <React.Suspense fallback={null}>
+    <React.Suspense fallback={
+      <div className="h-screen w-full bg-[#0A0A0A] flex flex-col items-center justify-center text-white font-sans">
+        <div className="w-10 h-10 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin"></div>
+        <p className="mt-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Loading Assets...</p>
+      </div>
+    }>
       <NotificationProvider userId={session?.user?.id}>
         <ChatProvider userId={session?.user?.id}>
           <ThemeProvider>
-            {authLoading ? (
-              <div className="h-screen w-full bg-[#0A0A0A] flex flex-col items-center justify-center font-sans tracking-tight text-white">
-                <div className="w-10 h-10 border-2 border-[#FF6B1A] border-t-transparent rounded-full animate-spin"></div>
-                <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500 animate-pulse">Initializing Neural Link...</p>
-              </div>
-            ) : (
-              <div className="min-h-screen w-full bg-[#0A0A0A]">
-                <Router>
-                  <AnimatedRoutes session={session} isBlocked={isBlocked} />
-                </Router>
-              </div>
-            )}
+            <>
+              {authLoading ? (
+                <div className="h-screen w-full bg-[#0A0A0A] flex flex-col items-center justify-center font-sans tracking-tight text-white">
+                  <div className="w-10 h-10 border-2 border-[#FF6B1A] border-t-transparent rounded-full animate-spin"></div>
+                  <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF6B1A] animate-pulse">Establishing Connection...</p>
+                </div>
+              ) : (
+                <div className="min-h-screen w-full bg-[#0A0A0A]">
+                  <Router>
+                    <AnimatedRoutes session={session} isBlocked={isBlocked} />
+                  </Router>
+                </div>
+              )}
+            </>
           </ThemeProvider>
         </ChatProvider>
       </NotificationProvider>
