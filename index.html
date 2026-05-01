@@ -54,43 +54,52 @@
   </head>
   <body>
     <div id="splash-screen">
-      <!-- Premium Animated Globe SVG -->
+      <!-- Custom Cloud AI Logo -->
       <svg id="splash-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="globe-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="cloud-grad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color:#FF6B1A;stop-opacity:1" />
             <stop offset="100%" style="stop-color:#FF1A6B;stop-opacity:1" />
           </linearGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+          <filter id="cloud-glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
             <feMerge>
-              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="blur"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
         </defs>
-        <circle cx="50" cy="50" r="45" fill="none" stroke="url(#globe-grad)" stroke-width="0.5" opacity="0.3" />
-        <circle cx="50" cy="50" r="38" fill="none" stroke="url(#globe-grad)" stroke-width="1.5" filter="url(#glow)" />
-        <path d="M50 12 L50 88 M12 50 L88 50" stroke="url(#globe-grad)" stroke-width="0.5" opacity="0.2">
-          <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite" />
-        </path>
-        <ellipse cx="50" cy="50" rx="38" ry="15" fill="none" stroke="url(#globe-grad)" stroke-width="0.5" opacity="0.3">
-          <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="6s" repeatCount="indefinite" />
-        </ellipse>
-        <ellipse cx="50" cy="50" rx="15" ry="38" fill="none" stroke="url(#globe-grad)" stroke-width="0.5" opacity="0.3">
-          <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="8s" repeatCount="indefinite" />
-        </ellipse>
+        <!-- Minimalist Cloud Shape -->
+        <g filter="url(#cloud-glow)">
+          <path d="M25 65 A15 15 0 0 1 25 35 A20 20 0 0 1 65 35 A15 15 0 0 1 65 65 Z" fill="url(#cloud-grad)" />
+          <circle cx="45" cy="40" r="18" fill="url(#cloud-grad)" />
+          <circle cx="65" cy="50" r="15" fill="url(#cloud-grad)" />
+          <circle cx="35" cy="50" r="15" fill="url(#cloud-grad)" />
+          <!-- Connectivity dots -->
+          <circle cx="50" cy="50" r="2" fill="white" opacity="0.8">
+            <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2s" repeatCount="indefinite" />
+          </circle>
+        </g>
       </svg>
-      <div style="margin-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 12px;">
-        <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.6em; color: #FFFFFF; text-transform: uppercase;">Initializing Neural Node</div>
-        <div style="width: 140px; h-1px; background: rgba(255,255,255,0.1); position: relative; overflow: hidden; height: 1px;">
-           <div style="position: absolute; inset: 0; background: linear-gradient(90deg, transparent, #FF6B1A, transparent); animation: loading-bar 2s infinite ease-in-out;"></div>
+      <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+        <div style="font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.3em; color: #FFFFFF; text-transform: uppercase; opacity: 0.8;">Loading...</div>
+        <div style="width: 100px; height: 2px; background: rgba(255,255,255,0.05); position: relative; overflow: hidden; border-radius: 10px;">
+           <div style="position: absolute; inset: 0; background: linear-gradient(90deg, transparent, #FF6B1A, transparent); animation: loading-bar 1.5s infinite linear;"></div>
         </div>
       </div>
       <style>
         @keyframes loading-bar {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
+        }
+        #splash-logo {
+          width: 120px;
+          height: 120px;
+          animation: float-cloud 3s ease-in-out infinite;
+        }
+        @keyframes float-cloud {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
         }
       </style>
     </div>
