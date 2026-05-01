@@ -9,14 +9,9 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  /* Removed auto-redirect to allow login page verification */
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        window.location.replace('/dashboard');
-      }
-    };
-    checkSession();
+    // No-op
   }, []);
 
   const handleAuth = async () => {
@@ -77,7 +72,12 @@ const Login = () => {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center">
-              <img src="/logo.svg" className="w-full h-full object-contain" alt="Logo" />
+               <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">
+                <circle cx="50" cy="50" r="40" fill="none" stroke="white" strokeWidth="3" />
+                <ellipse cx="50" cy="50" rx="18" ry="40" fill="none" stroke="white" strokeWidth="2.5" />
+                <line x1="10" y1="50" x2="90" y2="50" stroke="white" strokeWidth="2.5" />
+                <path d="M50 32 L59 50 L50 68 L41 50 Z" fill="white" />
+              </svg>
             </div>
             <h1 
               className="text-3xl drop-shadow-md text-white/95"
