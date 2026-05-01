@@ -166,7 +166,7 @@ function App() {
 function AnimatedRoutes({ session, isBlocked, authLoading }) {
   return (
     <Routes>
-      <Route path="/login" element={!session ? <Login /> : <Navigate to="/dashboard" replace />} />
+      <Route path="/login" element={<Login />} />
       
       <Route path="/dashboard" element={<ProtectedRoute session={session} isBlocked={isBlocked}><Dashboard /></ProtectedRoute>} />
       <Route path="/assistant" element={<ProtectedRoute session={session} isBlocked={isBlocked}><Assistant /></ProtectedRoute>} />
