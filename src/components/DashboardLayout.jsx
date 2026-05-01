@@ -19,8 +19,8 @@ export const OperonLogo = ({ size = 28 }) => (
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_8px_rgba(255,107,26,0.3)]">
       <defs>
         <linearGradient id="logo-cloud-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#FF6B1A;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#FF1A6B;stop-opacity:1" />
+          <stop offset="0%" stopColor="#FF6B1A" stopOpacity="1" />
+          <stop offset="100%" stopColor="#FF1A6B" stopOpacity="1" />
         </linearGradient>
       </defs>
       <path 
