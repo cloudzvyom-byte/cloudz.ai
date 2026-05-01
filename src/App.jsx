@@ -80,16 +80,17 @@ function App() {
         
         if (currentSession) {
           try {
-            const { data: profile } = await supabase
+            const { data: profile, error: profileError } = await supabase
               .from('profiles')
               .select('is_blocked')
               .eq('id', currentSession.user.id)
-              .single();
+              .maybeSingle(); // Use maybeSingle to avoid 406/404 errors
             
-            // Force isBlocked to false for testing AI agent
-            setIsBlocked(false);
-          } catch (err) {
-            console.error('Profile check error:', err);
+            if (profileError) console.warn('Profile fetch warning (non-fatal):', profileError);
+            if (profile?.is_blocked) setIsBlocked(true);
+            else setIsBlocked(false);
+          } catch (e) {
+            console.warn('Block status check failed (non-fatal):', e);
           }
         }
 
