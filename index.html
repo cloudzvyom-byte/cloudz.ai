@@ -7,21 +7,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
     <meta name="color-scheme" content="dark">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <title>Clouds AI — Human automation. AI scale.</title>
     <meta name="description" content="Clouds is your AI-powered workforce platform for managing sales, support, and outreach agents." />
     
     <style>
       html, body, #root {
-        background-color: #0A0A0A !important;
+        background-color: #000000 !important;
         color: #FFFFFF;
         margin: 0; padding: 0; min-height: 100vh;
+      }
+      #splash-screen {
+        position: fixed;
+        inset: 0;
+        background: #000000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+      }
+      #splash-logo {
+        width: 160px;
+        height: 160px;
+        animation: pulse-logo 2.5s ease-in-out infinite;
+      }
+      @keyframes pulse-logo {
+        0%, 100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
+        50% { transform: scale(1.05); opacity: 0.7; filter: drop-shadow(0 0 30px rgba(255,255,255,0.4)); }
+      }
+      .loaded #splash-screen {
+        opacity: 0;
+        visibility: hidden;
       }
     </style>
 
     <script>
       (function() {
-        const t = localStorage.getItem('clouds_theme') || 'orange-black';
+        const t = localStorage.getItem('operon_theme') || 'white-cherry';
         document.documentElement.setAttribute('data-theme', t);
       })();
     </script>
@@ -29,7 +53,18 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </head>
   <body>
+    <div id="splash-screen">
+      <img src="/logo.svg" id="splash-logo" alt="Clouds AI Logo" />
+      <div style="margin-top: 40px; font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 900; letter-spacing: 0.4em; color: rgba(255,255,255,0.4); text-transform: uppercase;">Initializing System</div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          document.body.classList.add('loaded');
+        }, 1500);
+      });
+    </script>
   </body>
 </html>
