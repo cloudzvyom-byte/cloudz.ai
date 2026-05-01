@@ -101,13 +101,7 @@ function App() {
         }
 
         // Explicit redirect for OAuth completion
-        if (currentSession && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')) {
-          if (window.location.pathname === '/login') {
-            window.location.replace('/dashboard');
-          }
-        } else if (event === 'SIGNED_OUT') {
-          window.location.replace('/landing');
-        }
+        /* Removed auto-redirect to allow login page verification */
       }
     };
 
