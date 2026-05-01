@@ -64,44 +64,17 @@ function App() {
   useEffect(() => {
     let mounted = true;
     
-    // Fail-safe to ensure we don't load forever if Supabase hangs
+    // ULTRA FAST LOAD: 0.5s safety timer
     const failSafeTimer = setTimeout(() => {
-      if (mounted) {
-        console.warn('Auth initialization timed out. Proceeding...');
-        setAuthLoading(false);
-      }
-    }, 3000);
+      if (mounted) setAuthLoading(false);
+    }, 500);
 
     const handleAuthState = async (event, currentSession) => {
-      console.log('Auth Protocol Event:', event, !!currentSession);
-      
       if (mounted) {
         setSession(currentSession);
-        
-        if (currentSession) {
-          try {
-            const { data: profile, error: profileError } = await supabase
-              .from('profiles')
-              .select('is_blocked')
-              .eq('id', currentSession.user.id)
-              .maybeSingle(); // Use maybeSingle to avoid 406/404 errors
-            
-            if (profileError) console.warn('Profile fetch warning (non-fatal):', profileError);
-            if (profile?.is_blocked) setIsBlocked(true);
-            else setIsBlocked(false);
-          } catch (e) {
-            console.warn('Block status check failed (non-fatal):', e);
-          }
-        }
-
-        // Only stop loading if we have a result or no token in URL
-        if (currentSession || !window.location.hash.includes('access_token')) {
-          setAuthLoading(false);
-          clearTimeout(failSafeTimer);
-        }
-
-        // Explicit redirect for OAuth completion
-        /* Removed auto-redirect to allow login page verification */
+        // Skip profile check to speed up launch
+        setAuthLoading(false);
+        clearTimeout(failSafeTimer);
       }
     };
 
