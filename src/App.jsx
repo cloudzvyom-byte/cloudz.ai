@@ -146,33 +146,26 @@ function App() {
 
   return (
     <ThemeProvider>
-      <AnimatePresence mode="wait">
-        {authLoading ? (
-          <div key="loader" className="h-screen w-full bg-[#0A0A0A] flex flex-col items-center justify-center font-sans tracking-tight text-white">
-            <div className="w-10 h-10 border-2 border-[#FF6B1A] border-t-transparent rounded-full animate-spin"></div>
-            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500 animate-pulse">Initializing Neural Link...</p>
-          </div>
-        ) : (
-          <motion.div 
-            key="app"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="min-h-screen w-full"
-          >
-            <NotificationProvider userId={session?.user?.id}>
-              <ChatProvider userId={session?.user?.id}>
-                <div className="min-h-screen w-full">
-                  <SmoothScroll>
-                    <Router>
-                      <AnimatedRoutes session={session} isBlocked={isBlocked} authLoading={authLoading} />
-                    </Router>
-                  </SmoothScroll>
-                </div>
-              </ChatProvider>
-            </NotificationProvider>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {authLoading ? (
+        <div className="h-screen w-full bg-[#0A0A0A] flex flex-col items-center justify-center font-sans tracking-tight text-white">
+          <div className="w-10 h-10 border-2 border-[#FF6B1A] border-t-transparent rounded-full animate-spin"></div>
+          <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500 animate-pulse">Initializing Neural Link...</p>
+        </div>
+      ) : (
+        <div className="min-h-screen w-full bg-[#0A0A0A]">
+          <NotificationProvider userId={session?.user?.id}>
+            <ChatProvider userId={session?.user?.id}>
+              <div className="min-h-screen w-full">
+                <SmoothScroll>
+                  <Router>
+                    <AnimatedRoutes session={session} isBlocked={isBlocked} authLoading={authLoading} />
+                  </Router>
+                </SmoothScroll>
+              </div>
+            </ChatProvider>
+          </NotificationProvider>
+        </div>
+      )}
     </ThemeProvider>
   );
 }
