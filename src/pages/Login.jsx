@@ -60,7 +60,7 @@ const Login = () => {
   };
 
   return (
-    <section className="relative min-h-screen sky-gradient flex items-center justify-center overflow-hidden font-sans">
+    <section className="relative min-h-screen sunset-gradient flex items-center justify-center overflow-hidden font-sans">
       {/* Background Clouds */}
       <div className="absolute inset-0">
         <Clouds density="high" />
@@ -76,8 +76,8 @@ const Login = () => {
           
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-sky-deep shadow-xl shadow-sky-deep/20 text-xl font-bold">
-              O
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center">
+              <img src="/logo.svg" className="w-full h-full object-contain" alt="Logo" />
             </div>
             <h1 
               className="text-3xl drop-shadow-md text-white/95"
