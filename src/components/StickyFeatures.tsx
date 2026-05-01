@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 const features = [
@@ -23,9 +23,9 @@ function Panel({ f, i, total }: { f: (typeof features)[number]; i: number; total
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   
-  const y = useTransform(scrollYProgress, [0, 1], [60, -60]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.95, 1, 1, 0.95]);
+  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const opacity = useTransform(scrollYProgress, [0, 0.18, 0.82, 1], [0, 1, 1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.18, 0.82, 1], [0.96, 1, 1, 0.96]);
 
   return (
     <section
@@ -64,7 +64,7 @@ function Panel({ f, i, total }: { f: (typeof features)[number]; i: number; total
 
         <motion.div
           style={{ 
-            y: useTransform(scrollYProgress, [0, 1], [150, -150]),
+            y: useTransform(scrollYProgress, [0, 1], [100, -100]),
             opacity,
             scale 
           }}

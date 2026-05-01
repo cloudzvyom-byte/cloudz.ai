@@ -8,10 +8,10 @@ import {
 import { supabase } from '../lib/supabase';
 
 const AGENTS = {
-  'voice-support': { name: 'Customer Voice Support Agent', price: 8999, icon: Zap },
-  'chat-support': { name: 'Customer Chat Support Agent', price: 4999, icon: Globe },
-  'sales-dialer': { name: 'Sales Dialer Agent', price: 11999, icon: Cpu },
-  'email-outreach': { name: 'AI Outreach Agent', price: 5999, icon: Sparkles }
+  'voice-support': { name: 'Customer Voice Support Agent', price: 9999, icon: Zap },
+  'chat-support': { name: 'Customer Chat Support Agent', price: 9999, icon: Globe },
+  'sales-dialer': { name: 'Sales Dialer Agent', price: 9999, icon: Cpu },
+  'email-outreach': { name: 'AI Outreach Agent', price: 9999, icon: Sparkles }
 };
 
 const CREDIT_BUNDLES = [

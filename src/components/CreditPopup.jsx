@@ -57,7 +57,7 @@ const CreditPopup = ({ isOpen, onClose, balance = 0 }) => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-white/5 text-[9px] font-medium text-gray-600 uppercase tracking-widest text-center">
-          Authorized by Operon Neural Security v4.0.2
+          Authorized by Clouds Neural Security v4.0.2
         </div>
       </div>
     </div>

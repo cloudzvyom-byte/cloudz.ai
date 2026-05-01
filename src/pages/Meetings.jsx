@@ -138,7 +138,7 @@ const Meetings = () => {
                       {msg.role === 'agent' ? 'AI' : 'CU'}
                     </div>
                     <div className={`max-w-[75%] space-y-3 ${msg.role === 'agent' ? 'items-start' : 'items-end'}`}>
-                      <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em]">{msg.role === 'agent' ? 'Operon Protocol' : selectedMeeting.client}</p>
+                      <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em]">{msg.role === 'agent' ? 'Clouds Protocol' : selectedMeeting.client}</p>
                       <div className={`p-6 rounded-[28px] text-[13px] leading-relaxed shadow-xl border ${msg.role === 'agent' ? 'bg-[#111111] rounded-tl-none border-[var(--border)] text-[var(--text-secondary)]' : 'bg-[var(--accent-tint)] rounded-tr-none border-[var(--accent)]/30 text-white font-medium'}`}>
                         {msg.content}
                       </div>

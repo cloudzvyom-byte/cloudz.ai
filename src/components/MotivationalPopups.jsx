@@ -6,7 +6,7 @@ const MESSAGES = [
   "Ruk mat, tu kar sakta hai! 💪",
   "Every call = closer to ₹1K/month!",
   "Keep going. SuperAGI bhi aise shuru hua!",
-  "Operon AI ka time aa gaya! 🚀",
+  "Clouds AI ka time aa gaya! 🚀",
   "Ek aur call. Bas ek aur. 📞"
 ];
 
@@ -63,7 +63,7 @@ const MotivationalPopups = () => {
                 <Sparkles size={16} />
               </div>
               <div>
-                <p className="text-sm font-black uppercase tracking-tight text-black dark:text-white mb-1">Operon Motivation</p>
+                <p className="text-sm font-black uppercase tracking-tight text-black dark:text-white mb-1">Clouds Motivation</p>
                 <p className="text-sm font-medium text-black dark:text-white leading-tight">
                   {currentMessage}
                 </p>

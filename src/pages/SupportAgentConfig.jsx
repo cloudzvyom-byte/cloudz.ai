@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Headset, Phone, Upload, Settings, Check, FileText, Clock, MessageSquare, Save, Loader2, PhoneCall, PhoneOff, ChevronDown, ChevronUp, RefreshCw, User, Calendar, TrendingUp, X } from 'lucide-react';
 import Vapi from '@vapi-ai/web';
-import { getVapiAssistant, updateVapiAssistant, getVapiCallsByAssistant } from '../lib/vapi';
+import { getVapiAssistant, updateVapiAssistant, getVapiCallsByAssistant, triggerSupportCall } from '../lib/vapi';
 import { supabase } from '../lib/supabase';
 
 const fmt = (s) => {
@@ -41,6 +41,9 @@ const SupportAgentConfig = () => {
   const [selectedCall, setSelectedCall] = useState(null);
   const [userAssistantId, setUserAssistantId] = useState(null);
   const [assignedNumber, setAssignedNumber] = useState(null);
+  const [phoneNumberId, setPhoneNumberId] = useState(null);
+  const [testPhone, setTestPhone] = useState('');
+  const [isCalling, setIsCalling] = useState(false);
   const [config, setConfig] = useState({
     name: 'Sarah (Customer Support)',
     firstMessage: 'Hi there! Thanks for calling. How can I help you today?',
@@ -64,8 +67,9 @@ const SupportAgentConfig = () => {
           if (data) {
             setConfig(prev => ({ ...prev, name: data.name || prev.name, firstMessage: data.firstMessage || prev.firstMessage, systemPrompt: data.model?.messages?.[0]?.content || prev.systemPrompt }));
             
-            const numberObj = data.phoneNumbers?.[0] || (data.phoneNumberId ? { number: 'Linked' } : null);
+            const numberObj = data.phoneNumbers?.[0] || (data.phoneNumberId ? { number: 'Linked', id: data.phoneNumberId } : null);
             setAssignedNumber(numberObj?.number || null);
+            setPhoneNumberId(data.phoneNumberId || numberObj?.id || null);
             setAgentLive(!!numberObj);
           } else { setAgentLive(false); }
         } else { setAgentLive(false); }
@@ -103,6 +107,20 @@ const SupportAgentConfig = () => {
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (err) { alert('Failed to save: ' + err.message); } finally { setLoading(false); }
+  };
+
+  const handleTestCall = async () => {
+    if (!userAssistantId) return alert('Please deploy protocol first.');
+    if (!testPhone) return alert('Please enter your phone number.');
+    setIsCalling(true);
+    try {
+      await triggerSupportCall(testPhone, 'Developer Test', userAssistantId);
+      alert(`Calling ${testPhone}... Pick up to talk to your agent!`);
+    } catch (err) {
+      alert('Test Call Error: ' + err.message);
+    } finally {
+      setIsCalling(false);
+    }
   };
 
   const handleFileUpload = async (e) => {
@@ -236,8 +254,33 @@ const SupportAgentConfig = () => {
                       const vapi = new VapiConstructor(import.meta.env.VITE_VAPI_PUBLIC_KEY || '');
                       await vapi.start(userAssistantId);
                     } catch (err) { alert('Web Call Error: ' + err.message); }
-                  }} className="px-8 py-3 bg-[var(--accent)] text-[#0A0A0A] rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[var(--accent-hover)] transition-all shadow-xl hover-pop active:scale-95">
-                    Start Neural Session
+                  }} className="px-8 py-3 bg-white/5 text-white border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all shadow-xl hover-pop active:scale-95">
+                    Start Neural Session (Browser)
+                  </button>
+                </div>
+
+                {/* Mobile Testing Section */}
+                <div className="p-8 bg-[var(--bg-input)] border border-[var(--accent)]/10 rounded-[24px] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                  <div className="flex-1">
+                    <h4 className="text-lg font-medium text-white mb-1">Mobile Testing</h4>
+                    <p className="text-[var(--text-muted)] text-xs font-bold uppercase tracking-widest opacity-60">Send a test call to your actual phone</p>
+                    <div className="mt-4 flex gap-3 max-w-md">
+                      <input 
+                        type="text" 
+                        placeholder="Your Phone (e.g. +91...)" 
+                        value={testPhone} 
+                        onChange={e => setTestPhone(e.target.value)}
+                        className="flex-1 h-11 bg-[var(--bg-card)] border border-[var(--border)] rounded-[12px] px-4 text-sm text-white focus:border-[var(--accent)] outline-none transition-all"
+                      />
+                    </div>
+                  </div>
+                  <button 
+                    onClick={handleTestCall} 
+                    disabled={isCalling}
+                    className="px-8 py-4 bg-[var(--accent)] text-[#0A0A0A] rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[var(--accent-hover)] transition-all shadow-xl hover-pop active:scale-95 disabled:opacity-50 flex items-center gap-2"
+                  >
+                    {isCalling ? <Loader2 size={14} className="animate-spin" /> : <PhoneCall size={14} />}
+                    {isCalling ? 'Connecting...' : 'Call My Phone'}
                   </button>
                 </div>
 

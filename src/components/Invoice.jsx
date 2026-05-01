@@ -39,12 +39,12 @@ const Invoice = ({ data, onClose }) => {
                 <div className="w-10 h-10 bg-black rounded-[12px] flex items-center justify-center text-orange-500">
                   <Zap size={24} fill="currentColor" />
                 </div>
-                <span className="text-2xl font-black tracking-tighter italic">OPERON AI.</span>
+                <span className="text-2xl font-black tracking-tighter italic">CLOUDS AI.</span>
               </div>
               <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-loose">
                 Neural Operations Division<br />
                 Silicon Valley, CA 94025<br />
-                contact@operon.ai
+                contact@clouds.ai
               </div>
             </div>
             <div className="text-right">
@@ -61,7 +61,7 @@ const Invoice = ({ data, onClose }) => {
               <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Billed To</h4>
               <div className="space-y-1">
                 <p className="text-lg font-black">{data.user}</p>
-                <p className="text-xs text-gray-500 font-medium">{data.email || 'user@operon.ai'}</p>
+                <p className="text-xs text-gray-500 font-medium">{data.email || 'user@clouds.ai'}</p>
                 <p className="text-xs text-gray-500 font-medium">Customer ID: {data.userId || 'N/A'}</p>
               </div>
             </div>
@@ -115,7 +115,7 @@ const Invoice = ({ data, onClose }) => {
             <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.4em] mb-4">Neural Infrastructure Authorization Verified</p>
             <p className="text-[9px] text-gray-400 font-medium max-w-sm mx-auto leading-relaxed">
               This is a computer-generated authorization receipt and does not require a physical signature.
-              Powered by the Operon Neural Engine.
+              Powered by the Clouds Neural Engine.
             </p>
           </div>
         </div>

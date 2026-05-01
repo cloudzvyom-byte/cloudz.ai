@@ -239,7 +239,7 @@ const Assistant = () => {
                 </div>
                 <div className="flex-1">
                   <div className="mb-2">
-                    <span className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em]">Operon AI is thinking</span>
+                    <span className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em]">Clouds AI is thinking</span>
                   </div>
                   <TypingIndicator />
                 </div>

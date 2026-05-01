@@ -128,7 +128,7 @@ const AdminDashboard = () => {
       <aside className="w-64 bg-[#0F0F0F] border-r border-white/5 flex flex-col p-6 h-screen">
         <div className="flex items-center gap-3 mb-12 px-2">
           <Shield size={24} className="text-orange-500" />
-          <span className="text-lg font-black tracking-tighter uppercase italic">Operon Admin.</span>
+          <span className="text-lg font-black tracking-tighter uppercase italic">Clouds Admin.</span>
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto custom-scrollbar">

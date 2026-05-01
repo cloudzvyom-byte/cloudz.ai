@@ -13,9 +13,9 @@ const AGENTS = [
     desc: 'Bilingual AI with advanced emotion detection and scheduling.',
     icon: Phone,
     color: 'text-purple-400',
-    monthly: 9000,
-    annual: 90000,
-    savings: 18000,
+    monthly: 9999,
+    annual: 99990,
+    savings: 19998,
     features: ['24/7 Inbound Latency < 200ms', 'Multi-Calendar Sync (GCal/iCal)', 'Contextual Memory Retention', 'Real-time Sentiment Analysis']
   },
   {
@@ -24,9 +24,9 @@ const AGENTS = [
     desc: 'Instant web and app support with high-fidelity reasoning.',
     icon: MessageSquare,
     color: 'text-cyan-400',
-    monthly: 5000,
-    annual: 50000,
-    savings: 10000,
+    monthly: 9999,
+    annual: 99990,
+    savings: 19998,
     features: ['Zero-Knowledge Auto-Learning', 'Instant Lead Qualification', 'Dynamic Routing Logic', 'Custom JSON Knowledge Base']
   },
   {
@@ -35,9 +35,9 @@ const AGENTS = [
     desc: 'High-velocity outbound dialer with conversion-focused logic.',
     icon: Headset,
     color: 'text-orange-400',
-    monthly: 12000,
-    annual: 120000,
-    savings: 24000,
+    monthly: 9999,
+    annual: 99990,
+    savings: 19998,
     features: ['Parallel Dialing (up to 5 lines)', 'Automated Objection Handling', 'DNC Compliance Registry', 'Integrated CRM Synchronization']
   },
   {
@@ -46,9 +46,9 @@ const AGENTS = [
     desc: 'Hyper-personalized cold outreach with human-like variability.',
     icon: Mail,
     color: 'text-blue-400',
-    monthly: 6000,
-    annual: 60000,
-    savings: 12000,
+    monthly: 9999,
+    annual: 99990,
+    savings: 19998,
     features: ['Recursive Follow-up Loops', 'Advanced A/B Growth Testing', 'Spam-Safe Warming Engine', 'Intent-Based Auto-Responses']
   }
 ];

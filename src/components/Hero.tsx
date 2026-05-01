@@ -1,13 +1,13 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 
-  const scale = useTransform(scrollYProgress, [0, 0.45, 0.85], [1, 1.15, 1.35]);
-  const opacity = useTransform(scrollYProgress, [0, 0.4, 0.8, 1], [1, 1, 0.6, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.45], ["0px", "-50px"]);
+  const scale = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1.08, 1.18]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 0.85, 1], [1, 1, 0.4, 0]);
+  const y = useTransform(scrollYProgress, [0, 0.6], ["0px", "-40px"]);
 
   return (
     <section 
@@ -40,7 +40,7 @@ export function Hero() {
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 1 }}
+          transition={{ delay: 1.2, duration: 1.2, ease: "easeOut" }}
           className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center"
         >
           <p className="text-sm font-black uppercase tracking-[0.4em] text-white/60 mb-4">
