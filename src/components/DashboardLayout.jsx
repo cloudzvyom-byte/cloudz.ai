@@ -15,8 +15,22 @@ import {
 
 /* ─── Operon Logo ────────────────────────────────────────────────── */
 export const OperonLogo = ({ size = 28 }) => (
-  <div className="relative flex items-center justify-center">
-    <Zap size={size} className="text-[var(--accent)] fill-current stroke-[3px]" />
+  <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_8px_rgba(255,107,26,0.3)]">
+      <defs>
+        <linearGradient id="logo-cloud-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#FF6B1A;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#FF1A6B;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <path 
+        d="M25 65 A15 15 0 0 1 25 35 A20 20 0 0 1 65 35 A15 15 0 0 1 65 65 Z" 
+        fill="url(#logo-cloud-grad)" 
+      />
+      <circle cx="45" cy="40" r="18" fill="url(#logo-cloud-grad)" />
+      <circle cx="65" cy="50" r="15" fill="url(#logo-cloud-grad)" />
+      <circle cx="35" cy="50" r="15" fill="url(#logo-cloud-grad)" />
+    </svg>
   </div>
 );
 
