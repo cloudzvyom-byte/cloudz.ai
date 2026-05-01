@@ -98,9 +98,13 @@ function App() {
         </div>
       ) : (
         <div className="min-h-screen w-full bg-[#0A0A0A]">
-          <Router>
-            <AnimatedRoutes session={session} isBlocked={isBlocked} />
-          </Router>
+          <NotificationProvider userId={session?.user?.id}>
+            <ChatProvider userId={session?.user?.id}>
+              <Router>
+                <AnimatedRoutes session={session} isBlocked={isBlocked} />
+              </Router>
+            </ChatProvider>
+          </NotificationProvider>
         </div>
       )}
     </ThemeProvider>
