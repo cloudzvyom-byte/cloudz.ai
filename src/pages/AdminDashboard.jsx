@@ -79,9 +79,26 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleSaveVapiSettings = () => {
+  const handleSaveVapiSettings = async () => {
     localStorage.setItem('vapi_settings', JSON.stringify(vapiSettings));
-    alert('VAPI Configuration Saved Successfully.');
+    
+    try {
+      const settingsToSave = [
+        { key: 'vapi_private_key', value: vapiSettings.privateKey },
+        { key: 'vapi_assistant_id', value: vapiSettings.assistantId },
+        { key: 'vapi_phone_number_id', value: vapiSettings.phoneNumberId }
+      ];
+
+      for (const setting of settingsToSave) {
+        if (setting.value) {
+          await supabase.from('admin_settings').upsert({ key: setting.key, value: setting.value }, { onConflict: 'key' });
+        }
+      }
+      alert('VAPI Configuration Saved to Local & Database.');
+    } catch (err) {
+      console.error('DB Save Error:', err);
+      alert('Saved locally, but failed to sync with Database: ' + err.message);
+    }
   };
 
   const testVapiConnection = async () => {
@@ -94,14 +111,18 @@ const AdminDashboard = () => {
       const res = await fetch(`https://api.vapi.ai/assistant/${vapiSettings.assistantId}`, {
         headers: { 'Authorization': `Bearer ${vapiSettings.privateKey}` }
       });
+      
+      const data = await res.json();
+      
       if (res.ok) {
-        const data = await res.json();
-        setVapiTestStatus(`✓ Connected — Assistant: ${data.name || 'Sales Agent'}`);
+        setVapiTestStatus(`✓ Connected — Assistant: ${data.name || 'Neural Agent'}`);
       } else {
-        setVapiTestStatus('✗ Connection failed — check your key or ID');
+        if (res.status === 401) setVapiTestStatus('✗ 401: Invalid API Key');
+        else if (res.status === 404) setVapiTestStatus('✗ 404: Assistant ID Not Found');
+        else setVapiTestStatus(`✗ Error: ${data.message || 'Connection failed'}`);
       }
     } catch (e) {
-      setVapiTestStatus('✗ Connection failed — network error');
+      setVapiTestStatus('✗ Network Error — Check connection');
     }
   };
 

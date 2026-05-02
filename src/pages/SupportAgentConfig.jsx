@@ -137,15 +137,32 @@ const SupportAgentConfig = () => {
   };
 
   const handleTestCall = async () => {
-    if (!userAssistantId) return alert('Please deploy first.');
-    if (!testPhone) return alert('Please enter your phone number.');
-    if (!phoneNumberId) return alert('Error: No active VAPI phone number found! Please assign a phone number to your assistant in the VAPI dashboard first.');
+    if (!userAssistantId) return alert('Please deploy your agent first.');
+    if (!testPhone || testPhone.trim().length < 10) {
+      return alert('Please enter a valid 10-digit phone number.');
+    }
+    
+    // Check for phoneNumberId
+    if (!phoneNumberId) {
+      return alert('Error: No active VAPI phone number is assigned to this assistant. Please provision a number in the VAPI dashboard or contact admin.');
+    }
+
     setIsCalling(true);
     try {
-      await triggerSupportCall(testPhone, 'Developer Test', userAssistantId, phoneNumberId);
-      alert(`Calling ${testPhone}... Pick up to talk to your agent!`);
+      // Use the improved triggerSupportCall which handles settings internally
+      const response = await triggerSupportCall(testPhone, 'Platform Test User', userAssistantId, phoneNumberId);
+      console.log('VAPI Call Initiated:', response);
+      alert(`Connection established! Calling ${testPhone}... Please pick up to verify your agent.`);
     } catch (err) {
-      alert('Test Call Error: ' + err.message);
+      console.error('Test Call Failure:', err);
+      // Specific error messaging based on failure type
+      if (err.message.includes('Incomplete')) {
+        alert('Configuration Error: ' + err.message);
+      } else if (err.message.includes('401') || err.message.includes('Unauthorized')) {
+        alert('Auth Error: Your VAPI Private Key is invalid or expired.');
+      } else {
+        alert('Call Failed: ' + err.message);
+      }
     } finally {
       setIsCalling(false);
     }

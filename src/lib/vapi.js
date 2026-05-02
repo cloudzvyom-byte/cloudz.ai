@@ -1,27 +1,68 @@
-export const getVapiSettings = (overrides = {}) => {
+export const getVapiSettings = async (overrides = {}) => {
   const local = JSON.parse(localStorage.getItem('vapi_settings')) || {};
-  const global = { 
-    privateKey: local.privateKey || import.meta.env.VITE_VAPI_PRIVATE_KEY || '', 
-    assistantId: local.assistantId || import.meta.env.VITE_VAPI_ASSISTANT_ID || '', 
-    phoneNumberId: local.phoneNumberId || import.meta.env.VITE_VAPI_PHONE_NUMBER_ID || '',
-    razorpayKeyId: local.razorpayKeyId || import.meta.env.VITE_RAZORPAY_KEY_ID || ''
+  
+  // 1. Env lookup (Build time)
+  const env = {
+    privateKey: import.meta.env.VITE_VAPI_PRIVATE_KEY || import.meta.env.VAPI_PRIVATE_KEY || import.meta.env.NEXT_PUBLIC_VAPI_KEY || '',
+    assistantId: import.meta.env.VITE_VAPI_ASSISTANT_ID || import.meta.env.VAPI_ASSISTANT_ID || '',
+    phoneNumberId: import.meta.env.VITE_VAPI_PHONE_NUMBER_ID || import.meta.env.VAPI_PHONE_NUMBER_ID || '',
+    razorpayKeyId: import.meta.env.VITE_RAZORPAY_KEY_ID || import.meta.env.RAZORPAY_KEY_ID || ''
   };
+
+  // 2. Database lookup (Dynamic)
+  let dbSettings = {};
+  try {
+    const { supabase } = await import('./supabase');
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    // Check global admin settings
+    const { data: adminSettings } = await supabase.from('admin_settings').select('key, value');
+    if (adminSettings) {
+      adminSettings.forEach(s => {
+        if (s.key === 'vapi_private_key') dbSettings.privateKey = s.value;
+        if (s.key === 'vapi_assistant_id') dbSettings.assistantId = s.value;
+        if (s.key === 'vapi_phone_number_id') dbSettings.phoneNumberId = s.value;
+      });
+    }
+
+    // Check user profile overrides
+    if (user) {
+      const { data: profile } = await supabase.from('profiles').select('vapi_key, vapi_assistant_id').eq('id', user.id).single();
+      if (profile?.vapi_key) dbSettings.privateKey = profile.vapi_key;
+      if (profile?.vapi_assistant_id) dbSettings.assistantId = profile.vapi_assistant_id;
+    }
+  } catch (err) {
+    console.warn('DB Settings Lookup Failed:', err.message);
+  }
+
+  const global = { 
+    privateKey: env.privateKey || local.privateKey || dbSettings.privateKey || '', 
+    assistantId: env.assistantId || local.assistantId || dbSettings.assistantId || '', 
+    phoneNumberId: env.phoneNumberId || local.phoneNumberId || dbSettings.phoneNumberId || '',
+    razorpayKeyId: env.razorpayKeyId || local.razorpayKeyId || dbSettings.razorpayKeyId || ''
+  };
+
   return { ...global, ...overrides };
 };
 
 export const formatPhone = (phone) => {
   if (!phone) return '';
   const cleaned = String(phone).replace(/\D/g, '');
-  if (cleaned.startsWith('91') && cleaned.length === 12) return '+' + cleaned;
+  // Auto-format for Indian numbers if it looks like one (10 digits or starts with 91)
   if (cleaned.length === 10) return '+91' + cleaned;
+  if (cleaned.startsWith('91') && cleaned.length === 12) return '+' + cleaned;
   return '+' + cleaned;
 };
 
 export const makeVapiCall = async (lead, campaign, options = {}) => {
-  const settings = getVapiSettings(options.vapiOverrides);
+  const settings = await getVapiSettings(options.vapiOverrides);
   
   if (!settings.privateKey || !settings.assistantId || !settings.phoneNumberId) {
-    throw new Error('VAPI configuration missing. Set keys in Admin Dashboard.');
+    const missing = [];
+    if (!settings.privateKey) missing.push('Private Key');
+    if (!settings.assistantId) missing.push('Assistant ID');
+    if (!settings.phoneNumberId) missing.push('Phone Number ID');
+    throw new Error(`VAPI Configuration Incomplete. Missing: ${missing.join(', ')}. Please check Admin Dashboard.`);
   }
 
   const response = await fetch('https://api.vapi.ai/call/phone', {
@@ -69,10 +110,14 @@ export const triggerSupportCall = async (customerPhone, customerName, assistantI
   const overrides = {};
   if (assistantId) overrides.assistantId = assistantId;
   if (phoneNumberId) overrides.phoneNumberId = phoneNumberId;
-  const settings = getVapiSettings(overrides);
+  const settings = await getVapiSettings(overrides);
   
   if (!settings.privateKey || !settings.assistantId || !settings.phoneNumberId) {
-    throw new Error('VAPI configuration missing for Support Agent. Missing privateKey, assistantId, or phoneNumberId.');
+    const missing = [];
+    if (!settings.privateKey) missing.push('Private Key');
+    if (!settings.assistantId) missing.push('Assistant ID');
+    if (!settings.phoneNumberId) missing.push('Phone Number ID');
+    throw new Error(`VAPI Configuration Incomplete for Support Agent. Missing: ${missing.join(', ')}.`);
   }
 
   const response = await fetch('https://api.vapi.ai/call/phone', {
@@ -110,10 +155,10 @@ export const triggerSupportCall = async (customerPhone, customerName, assistantI
 };
 
 export const getVapiCalls = async () => {
-  const settings = getVapiSettings();
+  const settings = await getVapiSettings();
   
   if (!settings.privateKey) {
-    throw new Error('VAPI configuration missing.');
+    throw new Error('VAPI Private Key missing.');
   }
 
   const response = await fetch('https://api.vapi.ai/call', {
@@ -133,10 +178,10 @@ export const getVapiCalls = async () => {
 };
 
 export const getVapiCallsByAssistant = async (assistantId) => {
-  const settings = getVapiSettings();
+  const settings = await getVapiSettings();
   
   if (!settings.privateKey) {
-    throw new Error('VAPI configuration missing.');
+    throw new Error('VAPI Private Key missing.');
   }
 
   const url = new URL('https://api.vapi.ai/call');
@@ -160,10 +205,10 @@ export const getVapiCallsByAssistant = async (assistantId) => {
 };
 
 export const getVapiCallDetails = async (callId) => {
-  const settings = getVapiSettings();
+  const settings = await getVapiSettings();
   
   if (!settings.privateKey) {
-    throw new Error('VAPI configuration missing.');
+    throw new Error('VAPI Private Key missing.');
   }
 
   const response = await fetch(`https://api.vapi.ai/call/${callId}`, {
@@ -183,10 +228,10 @@ export const getVapiCallDetails = async (callId) => {
 };
 
 export const getVapiAssistant = async (customAssistantId) => {
-  const settings = getVapiSettings(customAssistantId ? { assistantId: customAssistantId } : {});
+  const settings = await getVapiSettings(customAssistantId ? { assistantId: customAssistantId } : {});
   
   if (!settings.privateKey || !settings.assistantId) {
-    throw new Error('VAPI configuration missing.');
+    throw new Error('VAPI Private Key or Assistant ID missing.');
   }
 
   const response = await fetch(`https://api.vapi.ai/assistant/${settings.assistantId}`, {
@@ -206,10 +251,10 @@ export const getVapiAssistant = async (customAssistantId) => {
 };
 
 export const updateVapiAssistant = async (payload, customAssistantId) => {
-  const settings = getVapiSettings(customAssistantId ? { assistantId: customAssistantId } : {});
+  const settings = await getVapiSettings(customAssistantId ? { assistantId: customAssistantId } : {});
   
   if (!settings.privateKey || !settings.assistantId) {
-    throw new Error('VAPI configuration missing.');
+    throw new Error('VAPI Private Key or Assistant ID missing.');
   }
 
   const response = await fetch(`https://api.vapi.ai/assistant/${settings.assistantId}`, {
@@ -231,10 +276,10 @@ export const updateVapiAssistant = async (payload, customAssistantId) => {
 };
 
 export const createVapiAssistant = async (payload) => {
-  const settings = getVapiSettings();
+  const settings = await getVapiSettings();
   
   if (!settings.privateKey) {
-    throw new Error('VAPI configuration missing.');
+    throw new Error('VAPI Private Key missing.');
   }
 
   const response = await fetch('https://api.vapi.ai/assistant', {
@@ -256,10 +301,10 @@ export const createVapiAssistant = async (payload) => {
 };
 
 export const uploadVapiFile = async (file) => {
-  const settings = getVapiSettings();
+  const settings = await getVapiSettings();
   
   if (!settings.privateKey) {
-    throw new Error('VAPI configuration missing.');
+    throw new Error('VAPI Private Key missing.');
   }
 
   const formData = new FormData();
@@ -283,10 +328,10 @@ export const uploadVapiFile = async (file) => {
 };
 
 export const deleteVapiFile = async (fileId) => {
-  const settings = getVapiSettings();
+  const settings = await getVapiSettings();
   
   if (!settings.privateKey) {
-    throw new Error('VAPI configuration missing.');
+    throw new Error('VAPI Private Key missing.');
   }
 
   const response = await fetch(`https://api.vapi.ai/file/${fileId}`, {
@@ -305,10 +350,10 @@ export const deleteVapiFile = async (fileId) => {
 };
 
 export const sendVapiChatMessage = async (messages, assistantId) => {
-  const settings = getVapiSettings(assistantId ? { assistantId } : {});
+  const settings = await getVapiSettings(assistantId ? { assistantId } : {});
   
   if (!settings.privateKey || !settings.assistantId) {
-    throw new Error('VAPI configuration missing.');
+    throw new Error('VAPI Private Key or Assistant ID missing.');
   }
 
   const response = await fetch('https://api.vapi.ai/assistant/chat', {
@@ -335,8 +380,8 @@ export const sendVapiChatMessage = async (messages, assistantId) => {
 /* ─── Phone Number Management ──────────────────────────────────── */
 
 export const getVapiPhoneNumbers = async () => {
-  const settings = getVapiSettings();
-  if (!settings.privateKey) throw new Error('VAPI configuration missing.');
+  const settings = await getVapiSettings();
+  if (!settings.privateKey) throw new Error('VAPI Private Key missing.');
 
   const response = await fetch('https://api.vapi.ai/phone-number', {
     method: 'GET',
@@ -349,8 +394,8 @@ export const getVapiPhoneNumbers = async () => {
 };
 
 export const updateVapiPhoneNumber = async (phoneNumberId, payload) => {
-  const settings = getVapiSettings();
-  if (!settings.privateKey) throw new Error('VAPI configuration missing.');
+  const settings = await getVapiSettings();
+  if (!settings.privateKey) throw new Error('VAPI Private Key missing.');
 
   const response = await fetch(`https://api.vapi.ai/phone-number/${phoneNumberId}`, {
     method: 'PATCH',
