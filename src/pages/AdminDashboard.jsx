@@ -468,7 +468,7 @@ const AdminDashboard = () => {
                       onClick={handleSaveVapiSettings}
                       className="w-full py-5 bg-orange-500 text-black rounded-[16px] text-xs font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/10"
                     >
-                      Sync Razorpay Protocol
+                      Sync Razorpay
                     </button>
                   </div>
                 </div>

@@ -143,27 +143,33 @@ const Marketplace = () => {
                   Coming Soon <Sparkles size={14} className="opacity-50" />
                 </div>
               ) : (
-                <button 
-                  onClick={() => {
-                    if (isOwned) {
-                      const agentRoutes = {
-                        'voice-support': '/support-agent',
-                        'chat-support': '/support-agent',
-                        'sales-dialer': '/campaigns',
-                        'email-outreach': '/outreach',
-                      };
-                      navigate(agentRoutes[agent.id] || '/dashboard');
-                    } else {
-                      navigate(`/payment?agent=${agent.id}`);
-                    }
-                  }}
-                  className={`relative z-10 w-full py-4 rounded-[12px] border transition-all duration-300 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] ${
-                      isOwned ? 'bg-[var(--bg-input)] border-[var(--border)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--bg-hover)]' 
-                      : 'bg-[var(--accent)] border-[var(--accent)] text-[#0A0A0A] hover:bg-[var(--accent-hover)] shadow-lg shadow-[var(--accent)]/20'
-                  }`}
-                >
-                  {isOwned ? 'Access Agent Node' : 'Initialize Agent'} <ArrowRight size={14} />
-                </button>
+                  <button 
+                    onClick={() => {
+                      if (isOwned) {
+                        const agentRoutes = {
+                          'voice-support': '/support-agent',
+                          'chat-support': '/support-agent',
+                          'sales-dialer': '/campaigns',
+                          'email-outreach': '/outreach',
+                        };
+                        navigate(agentRoutes[agent.id] || '/dashboard');
+                      } else {
+                        // Prevent multi-agent deployment
+                        if (provisionedAgents.length > 0) {
+                          alert('Strategic Limit: Each operational cluster is restricted to 1 active Neural Agent node. Please terminate your current agent before provisioning a new one.');
+                          return;
+                        }
+                        navigate(`/payment?agent=${agent.id}`);
+                      }
+                    }}
+                    className={`relative z-10 w-full py-4 rounded-[12px] border transition-all duration-300 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] ${
+                        isOwned ? 'bg-[var(--bg-input)] border-[var(--border)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--bg-hover)]' 
+                        : (provisionedAgents.length > 0 ? 'bg-gray-800/50 border-gray-700 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] border-[var(--accent)] text-[#0A0A0A] hover:bg-[var(--accent-hover)] shadow-lg shadow-[var(--accent)]/20')
+                    }`}
+                    disabled={!isOwned && provisionedAgents.length > 0}
+                  >
+                    {isOwned ? 'Access Agent Node' : (provisionedAgents.length > 0 ? 'Max Nodes Active' : 'Initialize Agent')} <ArrowRight size={14} />
+                  </button>
               )}
             </div>
           );

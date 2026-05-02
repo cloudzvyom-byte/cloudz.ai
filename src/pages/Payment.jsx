@@ -49,6 +49,20 @@ const Payment = () => {
   };
 
   const handleRazorpay = async () => {
+    // Prevent multi-agent deployment check again at payment step
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && type !== 'topup') {
+        const { data: profile } = await supabase.from('profiles').select('purchased_agents').eq('id', user.id).single();
+        const purchased = profile?.purchased_agents || [];
+        if (purchased.length > 0 && !purchased.includes(agentId)) {
+          alert('Provisioning Error: You already have an active Neural Agent. Current protocol restricts users to 1 active agent node.');
+          navigate('/marketplace');
+          return;
+        }
+      }
+    } catch (_) {}
+
     setPaymentStep('processing');
     
     // Load Razorpay SDK dynamically
