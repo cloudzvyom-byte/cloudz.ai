@@ -35,7 +35,7 @@ const AdminDashboard = () => {
     { id: 'payments', name: 'Revenue & Razorpay', icon: CreditCard },
     { id: 'subscriptions', name: 'Subscriptions', icon: Activity },
     { id: 'users', name: 'User Management', icon: Users },
-    { id: 'broadcast', name: 'Push Protocol', icon: Send },
+    { id: 'broadcast', name: 'Push Broadcast', icon: Send },
     { id: 'vapi', name: 'VAPI Configuration', icon: Phone },
   ];
 
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
       if (error) throw error;
       setNewsForm({ title: '', description: '', image_url: '', link_url: '' });
       setShowForm(false);
-      alert('News Protocol Broadcasted Successfully.');
+      alert('News Broadcast Successfully.');
     } catch (err) {
       alert('Error broadcasting news: ' + err.message);
     } finally {
@@ -322,9 +322,9 @@ const AdminDashboard = () => {
         {activeTab === 'broadcast' && (
            <div className="space-y-12 animate-in fade-in slide-in-from-right-4">
              <div className="space-y-4 flex justify-between items-end">
-               <h1 className="text-4xl font-medium tracking-tight">Push <span className="text-orange-500">Protocol</span>.</h1>
+               <h1 className="text-4xl font-medium tracking-tight">Push <span className="text-orange-500">Broadcast</span>.</h1>
                <button onClick={() => setShowForm(!showForm)} className="px-8 py-4 bg-orange-500 text-black rounded-[12px] text-xs font-black uppercase tracking-widest hover:bg-orange-600 transition-all flex items-center gap-3">
-                 {showForm ? <X size={18} /> : <Plus size={18} />} {showForm ? 'Cancel Protocol' : 'New Broadcast'}
+                 {showForm ? <X size={18} /> : <Plus size={18} />} {showForm ? 'Cancel' : 'New Broadcast'}
                </button>
              </div>
              {showForm ? (

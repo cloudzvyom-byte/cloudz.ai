@@ -117,7 +117,7 @@ const Marketplace = () => {
                 {!isOwned && (
                   <div className="text-right">
                     <span className="block text-2xl font-medium text-[var(--text-primary)] tracking-tight">{agent.price}</span>
-                    <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">/Monthly Protocol</span>
+                    <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">/Monthly Service</span>
                   </div>
                 )}
               </div>

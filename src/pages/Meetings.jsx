@@ -54,7 +54,7 @@ const Meetings = () => {
         
         // Format transcript if available
         const transcript = call.transcript ? [
-          { role: 'agent', content: 'Protocol analysis complete. Booking confirmed based on interaction.', time: 'System Generated' },
+          { role: 'agent', content: 'Interaction analysis complete. Booking confirmed based on session.', time: 'System Generated' },
           { role: 'user', content: summary, time: 'Summary' }
         ] : [];
 
@@ -85,7 +85,7 @@ const Meetings = () => {
   }, []);
 
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this appointment protocol?')) {
+    if (window.confirm('Are you sure you want to delete this interaction node?')) {
       setMeetingsList(prev => prev.filter(m => m.id !== selectedMeeting.id));
       setSelectedMeeting(null);
     }
@@ -138,7 +138,7 @@ const Meetings = () => {
                       {msg.role === 'agent' ? 'AI' : 'CU'}
                     </div>
                     <div className={`max-w-[75%] space-y-3 ${msg.role === 'agent' ? 'items-start' : 'items-end'}`}>
-                      <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em]">{msg.role === 'agent' ? 'Clouds Protocol' : selectedMeeting.client}</p>
+                      <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em]">{msg.role === 'agent' ? 'Clouds Analysis' : selectedMeeting.client}</p>
                       <div className={`p-6 rounded-[28px] text-[13px] leading-relaxed shadow-xl border ${msg.role === 'agent' ? 'bg-[#111111] rounded-tl-none border-[var(--border)] text-[var(--text-secondary)]' : 'bg-[var(--accent-tint)] rounded-tr-none border-[var(--accent)]/30 text-white font-medium'}`}>
                         {msg.content}
                       </div>
@@ -158,7 +158,7 @@ const Meetings = () => {
           <div className="lg:col-span-4 space-y-8">
             <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-[40px] p-8 shadow-xl">
               <h4 className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
-                <User size={14} className="text-[var(--accent)]" /> Client Protocol
+                <User size={14} className="text-[var(--accent)]" /> Client Interaction
               </h4>
               <div className="space-y-6">
                 <div className="flex items-center gap-5">
@@ -182,7 +182,7 @@ const Meetings = () => {
                 <Clock size={80} className="text-white" />
               </div>
               <h4 className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
-                <Calendar size={14} className="text-[var(--accent)]" /> Schedule Protocol
+                <Calendar size={14} className="text-[var(--accent)]" /> Schedule Node
               </h4>
               <div className="space-y-5 relative z-10">
                 <div className="flex items-center gap-4 bg-[var(--bg-input)] p-4 rounded-[20px] border border-[var(--border)]">
@@ -249,7 +249,7 @@ const Meetings = () => {
         <table className="w-full text-left text-sm">
           <thead className="bg-[#111111]">
             <tr className="border-b border-[var(--border)]">
-              <th className="px-10 py-6 font-black text-[var(--text-muted)] uppercase tracking-[0.2em] text-[9px]">Client Protocol</th>
+              <th className="px-10 py-6 font-black text-[var(--text-muted)] uppercase tracking-[0.2em] text-[9px]">Client Status</th>
               <th className="px-10 py-6 font-black text-[var(--text-muted)] uppercase tracking-[0.2em] text-[9px]">Requirement Summary</th>
               <th className="px-10 py-6 font-black text-[var(--text-muted)] uppercase tracking-[0.2em] text-[9px]">Schedule Node</th>
               <th className="px-10 py-6 font-black text-[var(--text-muted)] uppercase tracking-[0.2em] text-[9px]">Verification Status</th>

@@ -34,7 +34,7 @@ const Settings = () => {
   };
 
   const handleNuclearDelete = async () => {
-    const confirmed = window.confirm("WARNING: NUCLEAR PROTOCOL ENGAGED.\n\nThis will permanently delete your account, all agents, call logs, and knowledge base data. This action CANNOT be undone.\n\nDo you wish to proceed?");
+    const confirmed = window.confirm("WARNING: SYSTEM WIPE ENGAGED.\n\nThis will permanently delete your account, all agents, call logs, and knowledge base data. This action CANNOT be undone.\n\nDo you wish to proceed?");
     if (confirmed) {
       setSaving(true);
       try {
@@ -344,7 +344,7 @@ const Settings = () => {
             <div className="space-y-10 animate-in fade-in slide-in-from-right-4 duration-500">
               <header className="mb-10">
                 <h2 className="text-2xl font-medium tracking-tight mb-2">Vault Security</h2>
-                <p className="text-sm text-[var(--text-secondary)]">Manage encryption protocols and access vectors.</p>
+                <p className="text-sm text-[var(--text-secondary)]">Manage encryption methods and access vectors.</p>
               </header>
 
               <div className="space-y-6">
@@ -359,7 +359,7 @@ const Settings = () => {
                     </div>
                   </div>
                   <button className="w-full py-4 bg-[var(--accent)] text-[#0A0A0A] rounded-[18px] font-bold text-xs uppercase tracking-[0.2em] hover:bg-[var(--accent-hover)] transition-all">
-                    Initialize MFA Protocol
+                    Initialize MFA System
                   </button>
                 </div>
 

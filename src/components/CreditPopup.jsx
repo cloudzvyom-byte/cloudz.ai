@@ -51,13 +51,13 @@ const CreditPopup = ({ isOpen, onClose, balance = 0 }) => {
               onClick={onClose}
               className="w-full py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest hover:text-white transition-all"
             >
-              Dismiss Protocol
+              Dismiss Alert
             </button>
           </div>
         </div>
 
         <div className="mt-8 pt-8 border-t border-white/5 text-[9px] font-medium text-gray-600 uppercase tracking-widest text-center">
-          Authorized by Clouds Neural Security v4.0.2
+          Authorized by Clouds Neural System v4.0.2
         </div>
       </div>
     </div>

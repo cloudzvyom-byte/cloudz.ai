@@ -56,7 +56,7 @@ const Payment = () => {
         const { data: profile } = await supabase.from('profiles').select('purchased_agents').eq('id', user.id).single();
         const purchased = profile?.purchased_agents || [];
         if (purchased.length > 0 && !purchased.includes(agentId)) {
-          alert('Provisioning Error: You already have an active Neural Agent. Current protocol restricts users to 1 active agent node.');
+          alert('Provisioning Error: You already have an active Neural Agent. Current system restricts users to 1 active agent node.');
           navigate('/marketplace');
           return;
         }
@@ -253,7 +253,7 @@ const Payment = () => {
               <span className="text-lg font-medium text-[var(--text-primary)] tracking-tight">Total Authorization</span>
               <div className="text-right">
                 <span className="block text-2xl font-medium text-[var(--accent)] tracking-tight">₹{finalPrice.toLocaleString()}</span>
-                <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-widest">INC. ALL PROTOCOL TAXES</span>
+                <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-widest">INC. ALL SERVICE TAXES</span>
               </div>
             </div>
           </div>
@@ -299,7 +299,7 @@ const Payment = () => {
           <div className="p-6 bg-[var(--accent-tint)] border border-[var(--accent)]/10 rounded-[20px] flex items-start gap-4">
             <Lock size={16} className="text-[var(--accent)] mt-1 flex-shrink-0" />
             <p className="text-[10px] text-[var(--accent)] font-medium leading-relaxed uppercase tracking-wider">
-              AUTHORIZED BY OPERON NEURAL PROTOCOL v4.0.2
+              AUTHORIZED BY OPERON NEURAL SYSTEM v4.0.2
             </p>
           </div>
         </div>

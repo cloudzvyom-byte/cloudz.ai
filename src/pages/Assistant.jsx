@@ -76,7 +76,7 @@ const WelcomeScreen = ({ onSuggestion }) => {
   const suggestions = [
     { text: 'Help me write a high-conversion cold outreach email', icon: <Send size={16} />, color: 'text-purple-400' },
     { text: 'Summarize neural telemetry from my active agents', icon: <Activity size={16} />, color: 'text-cyan-400' },
-    { text: 'Initialize a new sales script protocol for SaaS', icon: <Cpu size={16} />, color: 'text-orange-400' },
+    { text: 'Initialize a new sales script for SaaS', icon: <Cpu size={16} />, color: 'text-orange-400' },
     { text: 'Diagnostics: Voice Agent installation workflow', icon: <Zap size={16} />, color: 'text-blue-400' },
   ];
   return (
@@ -86,7 +86,7 @@ const WelcomeScreen = ({ onSuggestion }) => {
       </div>
       <h2 className="text-4xl font-medium mb-4 tracking-tight text-white">How can I assist your <span className="text-[var(--accent)]">Workflow</span>?</h2>
       <p className="text-[var(--text-secondary)] text-base mb-14 max-w-md leading-relaxed font-medium">
-        Your Cloud Neural Assistant is online. I can manage campaigns, initialize scripts, and optimize agent protocols.
+        Your Cloud Neural Assistant is online. I can manage campaigns, initialize scripts, and optimize agent workflows.
       </p>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">

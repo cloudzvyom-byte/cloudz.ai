@@ -261,7 +261,7 @@ const ChatAgentConfig = () => {
             {activeTab === 'whatsapp' && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2">
-                  <Globe className="text-[var(--accent)]" /> WhatsApp Business Protocol
+                  <Globe className="text-[var(--accent)]" /> WhatsApp Business System
                 </h3>
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed">Connect your VAPI Chat assistant directly to WhatsApp using Twilio or the Meta Business API. Your AI will respond using the same knowledge base configured in Identity & Prompt.</p>
                 

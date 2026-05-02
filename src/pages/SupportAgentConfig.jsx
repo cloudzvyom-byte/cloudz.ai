@@ -368,7 +368,7 @@ const SupportAgentConfig = () => {
             )}
 
             {/* CALL LOGS TAB */}
-            {activeTab === 'calllogs' && (
+            {activeTab === 'logs' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2"><PhoneCall className="text-[var(--accent)]" /> Call Logs</h3>
