@@ -158,7 +158,7 @@ const Marketplace = () => {
                     }
                   }}
                   className={`relative z-10 w-full py-4 rounded-[12px] border transition-all duration-300 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] ${
-                      ? 'bg-[var(--bg-input)] border-[var(--border)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--bg-hover)]' 
+                      isOwned ? 'bg-[var(--bg-input)] border-[var(--border)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--bg-hover)]' 
                       : 'bg-[var(--accent)] border-[var(--accent)] text-[#0A0A0A] hover:bg-[var(--accent-hover)] shadow-lg shadow-[var(--accent)]/20'
                   }`}
                 >
