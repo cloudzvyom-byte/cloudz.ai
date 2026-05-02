@@ -125,7 +125,7 @@ const Onboarding = () => {
                 <span className="flex items-center gap-3"><Cpu size={20} className="animate-spin" /> Synchronizing...</span>
               ) : (
                 <>
-                  Initialize <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform stroke-[3px]" />
+                  Deploy <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform stroke-[3px]" />
                 </>
               )}
             </button>

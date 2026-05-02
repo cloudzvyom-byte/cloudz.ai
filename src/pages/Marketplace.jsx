@@ -168,7 +168,7 @@ const Marketplace = () => {
                     }`}
                     disabled={!isOwned && provisionedAgents.length > 0}
                   >
-                    {isOwned ? 'Access Agent Node' : (provisionedAgents.length > 0 ? 'Max Nodes Active' : 'Initialize Agent')} <ArrowRight size={14} />
+                    {isOwned ? 'Access Agent Node' : (provisionedAgents.length > 0 ? 'Max Nodes Active' : 'Deploy')} <ArrowRight size={14} />
                   </button>
               )}
             </div>

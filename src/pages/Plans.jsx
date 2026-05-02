@@ -147,7 +147,7 @@ const Plans = () => {
                 onClick={() => navigate(`/payment?agent=${agent.id}&billing=${billing}`)}
                 className="w-full py-4 rounded-[18px] bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] text-xs font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent)] hover:text-[#0A0A0A] hover:border-[var(--accent)] transition-all flex items-center justify-center gap-2 group/btn shadow-lg"
               >
-                Initialize Agent <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+                Deploy <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
               </button>
             )}
           </div>
