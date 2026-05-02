@@ -4,6 +4,12 @@ import Vapi from '@vapi-ai/web';
 import { getVapiAssistant, updateVapiAssistant, getVapiCallsByAssistant, triggerSupportCall } from '../lib/vapi';
 import { supabase } from '../lib/supabase';
 
+const MODELS = [
+  { id: 'gpt-4o', name: 'GPT-4o (OpenAI)' },
+  { id: 'gpt-3.5-turbo', name: 'GPT-3.5 Turbo (OpenAI)' },
+  { id: 'claude-3-haiku-20240307', name: 'Claude 3 Haiku' },
+  { id: 'claude-3-sonnet-20240229', name: 'Claude 3 Sonnet' }
+];
 const fmt = (s) => {
   if (!s) return '--';
   const d = new Date(s);
@@ -45,12 +51,14 @@ const SupportAgentConfig = () => {
   const [testPhone, setTestPhone] = useState('');
   const [isCalling, setIsCalling] = useState(false);
   const [config, setConfig] = useState({
-    name: 'Sarah (Customer Support)',
+    name: 'Support Agent',
     firstMessage: 'Hi there! Thanks for calling. How can I help you today?',
-    systemPrompt: 'You are a helpful customer support agent. Be polite, concise, and empathetic.',
+    prompt: 'You are a helpful customer support agent. Be polite, concise, and empathetic.',
     forwardingNumber: '',
     handoffEnabled: false,
     businessHoursEnabled: false,
+    voice: 'jennifer-playht',
+    model: 'gpt-4o',
     manualKnowledge: ''
   });
 
@@ -60,12 +68,19 @@ const SupportAgentConfig = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
         const { data: profile } = await supabase.from('profiles').select('vapi_assistant_id').eq('id', user.id).single();
-        const assistantId = profile?.vapi_assistant_id;
+        const assistantId = profile?.vapi_assistant_id || user.user_metadata?.vapi_assistant_id;
         setUserAssistantId(assistantId);
         if (assistantId) {
           const data = await getVapiAssistant(assistantId);
           if (data) {
-            setConfig(prev => ({ ...prev, name: data.name || prev.name, firstMessage: data.firstMessage || prev.firstMessage, systemPrompt: data.model?.messages?.[0]?.content || prev.systemPrompt }));
+            setConfig(prev => ({ 
+              ...prev, 
+              name: data.name || prev.name, 
+              voice: data.voice?.provider === 'playht' ? `${data.voice.voiceId}-playht` : prev.voice,
+              prompt: data.model?.messages?.[0]?.content || prev.prompt,
+              model: data.model?.model || prev.model,
+              firstMessage: data.firstMessage || prev.firstMessage
+            }));
             
             const numberObj = data.phoneNumbers?.[0] || (data.phoneNumberId ? { number: 'Linked', id: data.phoneNumberId } : null);
             setAssignedNumber(numberObj?.number || null);
@@ -87,7 +102,7 @@ const SupportAgentConfig = () => {
     } catch (err) { console.error(err); } finally { setCallsLoading(false); }
   }, [userAssistantId]);
 
-  useEffect(() => { if (activeTab === 'calllogs' && userAssistantId) fetchCalls(); }, [activeTab, userAssistantId, fetchCalls]);
+  useEffect(() => { if (activeTab === 'logs' && userAssistantId) fetchCalls(); }, [activeTab, userAssistantId, fetchCalls]);
 
   const handleSave = async () => {
     let assistantId = userAssistantId;
@@ -95,26 +110,39 @@ const SupportAgentConfig = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
+      
+      const assistantData = { 
+        name: config.name, 
+        firstMessage: config.firstMessage, 
+        model: {
+          provider: config.model.includes('claude') ? 'anthropic' : 'openai',
+          model: config.model,
+          messages: [{ role: 'system', content: config.prompt }]
+        }
+      };
+
       if (!assistantId) {
         const { createVapiAssistant } = await import('../lib/vapi');
-        const va = await createVapiAssistant({ name: `${user.email}'s Voice Agent`, firstMessage: config.firstMessage, model: { provider: 'openai', model: 'gpt-4-turbo-preview', messages: [{ role: 'system', content: config.systemPrompt }] } });
+        const va = await createVapiAssistant(assistantData);
         assistantId = va.id;
         setUserAssistantId(assistantId);
-        await supabase.from('profiles').update({ vapi_assistant_id: assistantId }).eq('id', user.id);
+        await supabase.from('profiles').upsert({ id: user.id, vapi_assistant_id: assistantId });
         await supabase.auth.updateUser({ data: { vapi_assistant_id: assistantId } });
+      } else {
+        await updateVapiAssistant(assistantData, assistantId);
       }
-      await updateVapiAssistant({ name: config.name, firstMessage: config.firstMessage, model: { provider: 'openai', model: 'gpt-4-turbo-preview', messages: [{ role: 'system', content: config.systemPrompt }] } }, assistantId);
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (err) { alert('Failed to save: ' + err.message); } finally { setLoading(false); }
   };
 
   const handleTestCall = async () => {
-    if (!userAssistantId) return alert('Please deploy protocol first.');
+    if (!userAssistantId) return alert('Please deploy first.');
     if (!testPhone) return alert('Please enter your phone number.');
+    if (!phoneNumberId) return alert('Error: No active VAPI phone number found! Please assign a phone number to your assistant in the VAPI dashboard first.');
     setIsCalling(true);
     try {
-      await triggerSupportCall(testPhone, 'Developer Test', userAssistantId);
+      await triggerSupportCall(testPhone, 'Developer Test', userAssistantId, phoneNumberId);
       alert(`Calling ${testPhone}... Pick up to talk to your agent!`);
     } catch (err) {
       alert('Test Call Error: ' + err.message);
@@ -125,7 +153,7 @@ const SupportAgentConfig = () => {
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
-    if (!file || !userAssistantId) { alert('Please deploy protocol first.'); return; }
+    if (!file || !userAssistantId) { alert('Please deploy first.'); return; }
     setUploading(true);
     try {
       const { uploadVapiFile, updateVapiAssistant: uva, getVapiAssistant: gva } = await import('../lib/vapi');
@@ -138,24 +166,22 @@ const SupportAgentConfig = () => {
   };
 
   const TABS = [
-    { id: 'identity', label: 'Identity & Voice', icon: <MessageSquare size={16} /> },
-    { id: 'knowledge', label: 'Knowledge Base', icon: <FileText size={16} /> },
+    { id: 'identity', label: 'Identity & Voice', icon: <User size={16} /> },
+    { id: 'knowledge', label: 'Knowledge Base', icon: <Database size={16} /> },
     { id: 'routing', label: 'Call Routing', icon: <Phone size={16} /> },
-    { id: 'calllogs', label: 'Call Logs', icon: <PhoneCall size={16} /> },
+    { id: 'logs', label: 'Call Logs', icon: <Activity size={16} /> },
     { id: 'advanced', label: 'Advanced', icon: <Settings size={16} /> },
   ];
 
   return (
     <div className="p-8 lg:p-12 max-w-6xl mx-auto space-y-10 h-full overflow-y-auto animate-in fade-in duration-700">
-      {/* HEADER */}
       <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-[var(--border)] pb-8">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-[var(--accent-tint)] border border-[var(--accent)]/30 rounded-full mb-4">
             <Headset size={14} className="text-[var(--accent)]" />
             <span className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-widest">Inbound Architecture</span>
           </div>
-          <h1 className="text-4xl font-medium tracking-tight text-white mb-3">Customer Support <span className="text-[var(--accent)]">Agent</span>.</h1>
-          {/* STATUS BADGE */}
+          <h1 className="text-4xl font-medium tracking-tight text-[var(--text-primary)] mb-3">Customer Support <span className="text-[var(--accent)]">Agent</span>.</h1>
           <div className="flex items-center gap-3">
             {agentLive === null ? (
               <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full">
@@ -170,62 +196,72 @@ const SupportAgentConfig = () => {
                 </span>
               </div>
             ) : (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-orange-500/10 border border-orange-500/20 rounded-full">
-                <div className="w-2 h-2 rounded-full bg-orange-400" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-orange-400">No Phone Number — Assign in VAPI Dashboard</span>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--warning)]/10 border border-[var(--warning)]/20 rounded-full">
+                <div className="w-2 h-2 rounded-full bg-[var(--warning)]" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--warning)]">No Phone Number — Assign in VAPI Dashboard</span>
               </div>
             )}
           </div>
         </div>
         <button onClick={handleSave} disabled={loading} className="px-8 py-4 bg-[var(--accent)] text-[#0A0A0A] rounded-[16px] text-xs font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent-hover)] transition-all shadow-xl flex items-center gap-2">
           {loading ? <div className="w-4 h-4 border-2 border-[#0A0A0A] border-t-transparent rounded-full animate-spin" /> : saved ? <Check size={16} /> : <Save size={16} />}
-          {loading ? 'Compiling...' : saved ? 'Deployed' : 'Deploy Protocol'}
+          {loading ? 'Compiling...' : saved ? 'Deployed' : 'Deploy'}
         </button>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* SIDEBAR */}
         <div className="md:col-span-1 space-y-2">
           {TABS.map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              className={`w-full flex items-center gap-3 px-5 py-4 rounded-[16px] text-sm font-medium transition-all ${activeTab === tab.id ? 'bg-[var(--bg-card)] border border-[var(--border)] text-[var(--accent)] shadow-lg' : 'text-[var(--text-muted)] hover:bg-white/5 hover:text-white'}`}>
+              className={`w-full flex items-center gap-3 px-5 py-4 rounded-[16px] text-sm font-medium transition-all ${activeTab === tab.id ? 'bg-[var(--bg-card)] border border-[var(--border)] text-[var(--accent)] shadow-lg' : 'text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]'}`}>
               {tab.icon} {tab.label}
             </button>
           ))}
         </div>
 
-        {/* CONTENT */}
         <div className="md:col-span-3">
           <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-[32px] p-8 min-h-[500px]">
 
-            {/* IDENTITY TAB */}
             {activeTab === 'identity' && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-2"><MessageSquare className="text-[var(--accent)]" /> Identity & System Prompt</h3>
-                <div className="space-y-4">
-                  <label className="block text-xs font-bold text-[var(--text-secondary)] uppercase tracking-widest">Agent Name</label>
-                  <input type="text" value={config.name} onChange={e => setConfig({...config, name: e.target.value})} className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-white focus:border-[var(--accent)] outline-none transition-all" />
+                <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2"><MessageSquare className="text-[var(--accent)]" /> Identity & System Prompt</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <label className="block text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest px-1">Agent Identity Name</label>
+                    <input type="text" value={config.name} onChange={e => setConfig({...config, name: e.target.value})} className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all" />
+                  </div>
+                  <div className="space-y-4">
+                    <label className="block text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest px-1">Neural Engine (Model)</label>
+                    <select 
+                      value={config.model} 
+                      onChange={e => setConfig({...config, model: e.target.value})}
+                      className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all appearance-none cursor-pointer"
+                    >
+                      {MODELS.map(m => (
+                        <option key={m.id} value={m.id} className="bg-[var(--bg-card)]">{m.name}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 <div className="space-y-4">
                   <label className="block text-xs font-bold text-[var(--text-secondary)] uppercase tracking-widest">First Message Greeting</label>
-                  <input type="text" value={config.firstMessage} onChange={e => setConfig({...config, firstMessage: e.target.value})} className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-white focus:border-[var(--accent)] outline-none transition-all" />
+                  <input type="text" value={config.firstMessage} onChange={e => setConfig({...config, firstMessage: e.target.value})} className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all" />
                 </div>
                 <div className="space-y-4">
-                  <label className="block text-xs font-bold text-[var(--text-secondary)] uppercase tracking-widest">System Prompt (Instructions)</label>
-                  <textarea rows={6} value={config.systemPrompt} onChange={e => setConfig({...config, systemPrompt: e.target.value})} className="w-full bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] p-5 text-white focus:border-[var(--accent)] outline-none transition-all resize-none leading-relaxed" />
+                  <label className="block text-xs font-bold text-[var(--text-secondary)] uppercase tracking-widest">System Prompt & Personality</label>
+                  <textarea rows={8} value={config.prompt} onChange={e => setConfig({...config, prompt: e.target.value})} placeholder="Define how your agent should behave, its tone of voice, and its primary mission..." className="w-full bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] p-5 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all resize-none leading-relaxed placeholder:opacity-30" />
                 </div>
               </div>
             )}
 
-            {/* KNOWLEDGE TAB */}
             {activeTab === 'knowledge' && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-2"><FileText className="text-[var(--accent)]" /> Neural Context Engine</h3>
+                <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2"><FileText className="text-[var(--accent)]" /> Neural Context Engine</h3>
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed">Feed your agent PDFs, text, or manual instructions to enhance its accuracy.</p>
                 <div className="relative bg-[var(--bg-input)] border border-[var(--border)] rounded-[24px] overflow-hidden focus-within:border-[var(--accent)] transition-all">
-                  <textarea rows={10} value={config.manualKnowledge || ''} onChange={e => setConfig({...config, manualKnowledge: e.target.value})} placeholder="Type or paste business rules, FAQs, or knowledge here..." className="w-full bg-transparent p-8 text-white text-sm outline-none resize-none leading-relaxed placeholder:opacity-30" />
+                  <textarea rows={10} value={config.manualKnowledge || ''} onChange={e => setConfig({...config, manualKnowledge: e.target.value})} placeholder="Type or paste business rules, FAQs, or knowledge here..." className="w-full bg-transparent p-8 text-[var(--text-primary)] text-sm outline-none resize-none leading-relaxed placeholder:opacity-30" />
                   <div className="px-8 pb-6 flex items-center justify-between">
-                    <label className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] rounded-full text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] hover:text-white hover:border-[var(--accent)] transition-all cursor-pointer">
+                    <label className={`relative z-10 flex items-center gap-2 px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] rounded-full text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--accent)] transition-all cursor-pointer`}>
                       <Upload size={14} className="text-[var(--accent)]" />
                       {uploading ? 'Uploading...' : 'Attach File (.pdf, .txt, .csv)'}
                       <input type="file" className="hidden" onChange={handleFileUpload} disabled={uploading} accept=".pdf,.txt,.csv" />
@@ -239,22 +275,22 @@ const SupportAgentConfig = () => {
             {/* ROUTING TAB */}
             {activeTab === 'routing' && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-2"><Phone className="text-[var(--accent)]" /> Call Routing & Provisioning</h3>
+                <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2"><Phone className="text-[var(--accent)]" /> Call Routing & Provisioning</h3>
                 
                 {/* Browser Testing Section */}
                 <div className="p-8 bg-[var(--bg-input)] border border-[var(--accent)]/10 rounded-[24px] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                   <div>
-                    <h4 className="text-lg font-medium text-white mb-1">Developer Sandbox</h4>
+                    <h4 className="text-lg font-medium text-[var(--text-primary)] mb-1">Developer Sandbox</h4>
                     <p className="text-[var(--text-muted)] text-xs font-bold uppercase tracking-widest opacity-60">Test agent logic via browser (uses device mic)</p>
                   </div>
                   <button onClick={async () => {
-                    if (!userAssistantId) { alert('Please Deploy Protocol first.'); return; }
+                    if (!userAssistantId) { alert('Please Deploy first.'); return; }
                     try {
                       const VapiConstructor = Vapi.default || Vapi;
                       const vapi = new VapiConstructor(import.meta.env.VITE_VAPI_PUBLIC_KEY || '');
                       await vapi.start(userAssistantId);
                     } catch (err) { alert('Web Call Error: ' + err.message); }
-                  }} className="px-8 py-3 bg-white/5 text-white border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all shadow-xl hover-pop active:scale-95">
+                  }} className="px-8 py-3 bg-white/5 text-[var(--text-primary)] border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all shadow-xl hover-pop active:scale-95">
                     Start Neural Session (Browser)
                   </button>
                 </div>
@@ -262,7 +298,7 @@ const SupportAgentConfig = () => {
                 {/* Mobile Testing Section */}
                 <div className="p-8 bg-[var(--bg-input)] border border-[var(--accent)]/10 rounded-[24px] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                   <div className="flex-1">
-                    <h4 className="text-lg font-medium text-white mb-1">Mobile Testing</h4>
+                    <h4 className="text-lg font-medium text-[var(--text-primary)] mb-1">Mobile Testing</h4>
                     <p className="text-[var(--text-muted)] text-xs font-bold uppercase tracking-widest opacity-60">Send a test call to your actual phone</p>
                     <div className="mt-4 flex gap-3 max-w-md">
                       <input 
@@ -270,7 +306,7 @@ const SupportAgentConfig = () => {
                         placeholder="Your Phone (e.g. +91...)" 
                         value={testPhone} 
                         onChange={e => setTestPhone(e.target.value)}
-                        className="flex-1 h-11 bg-[var(--bg-card)] border border-[var(--border)] rounded-[12px] px-4 text-sm text-white focus:border-[var(--accent)] outline-none transition-all"
+                        className="flex-1 h-11 bg-[var(--bg-card)] border border-[var(--border)] rounded-[12px] px-4 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all"
                       />
                     </div>
                   </div>
@@ -288,7 +324,7 @@ const SupportAgentConfig = () => {
                   <div className="p-6 bg-[var(--accent-tint)] border border-[var(--accent)]/20 rounded-[24px] flex items-center justify-between">
                     <div>
                       <p className="text-[10px] font-black uppercase tracking-widest text-[var(--accent)] mb-1">Active Inbound Number</p>
-                      <p className="text-2xl font-bold text-white tracking-tight">{assignedNumber}</p>
+                      <p className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">{assignedNumber}</p>
                     </div>
                     <div className="px-4 py-2 bg-white/5 rounded-full text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] border border-white/10">
                       Primary Line
@@ -308,7 +344,7 @@ const SupportAgentConfig = () => {
                     </label>
                   </div>
                   {config.handoffEnabled && (
-                    <input type="text" placeholder="Forwarding Number (e.g. +91 98765 43210)" value={config.forwardingNumber} onChange={e => setConfig({...config, forwardingNumber: e.target.value})} className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-6 text-white focus:border-[var(--accent)] outline-none transition-all animate-in slide-in-from-top-2 duration-300" />
+                    <input type="text" placeholder="Forwarding Number (e.g. +91 98765 43210)" value={config.forwardingNumber} onChange={e => setConfig({...config, forwardingNumber: e.target.value})} className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-6 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all animate-in slide-in-from-top-2 duration-300" />
                   )}
                 </div>
               </div>
@@ -318,7 +354,7 @@ const SupportAgentConfig = () => {
             {activeTab === 'calllogs' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-2"><PhoneCall className="text-[var(--accent)]" /> Call Logs</h3>
+                  <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2"><PhoneCall className="text-[var(--accent)]" /> Call Logs</h3>
                   <button onClick={fetchCalls} disabled={callsLoading} className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-input)] border border-[var(--border)] rounded-full text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] hover:text-white hover:border-[var(--accent)] transition-all">
                     <RefreshCw size={12} className={callsLoading ? 'animate-spin' : ''} /> Refresh
                   </button>
@@ -334,7 +370,7 @@ const SupportAgentConfig = () => {
                     ].map(s => (
                       <div key={s.label} className="p-4 bg-[var(--bg-input)] border border-[var(--border)] rounded-[20px] text-center">
                         <s.icon size={18} className="text-[var(--accent)] mx-auto mb-2" />
-                        <div className="text-2xl font-bold text-white">{s.value}</div>
+                        <div className="text-2xl font-bold text-[var(--text-primary)]">{s.value}</div>
                         <div className="text-[9px] font-black uppercase tracking-widest text-[var(--text-muted)] mt-1">{s.label}</div>
                       </div>
                     ))}
@@ -362,7 +398,7 @@ const SupportAgentConfig = () => {
                               <User size={16} className="text-[var(--text-muted)]" />
                             </div>
                             <div>
-                              <p className="text-white font-semibold text-sm">{call.customer?.number || call.customer?.name || 'Unknown Caller'}</p>
+                              <p className="text-[var(--text-primary)] font-semibold text-sm">{call.customer?.number || call.customer?.name || 'Unknown Caller'}</p>
                               <p className="text-[var(--text-muted)] text-[10px] font-bold uppercase tracking-widest mt-0.5">{fmt(call.createdAt || call.startedAt)}</p>
                             </div>
                           </div>
@@ -389,7 +425,7 @@ const SupportAgentConfig = () => {
                                   const isAgent = line.toLowerCase().startsWith('assistant') || line.toLowerCase().startsWith('ai') || line.toLowerCase().startsWith('agent');
                                   return (
                                     <div key={i} className={`flex ${isAgent ? 'justify-start' : 'justify-end'}`}>
-                                      <div className={`max-w-[80%] px-4 py-2.5 rounded-[14px] text-sm leading-relaxed ${isAgent ? 'bg-[var(--accent-tint)] text-[var(--accent)] border border-[var(--accent)]/20' : 'bg-white/10 text-white'}`}>
+                                      <div className={`max-w-[80%] px-4 py-2.5 rounded-[14px] text-sm leading-relaxed ${isAgent ? 'bg-[var(--accent-tint)] text-[var(--accent)] border border-[var(--accent)]/20' : 'bg-white/10 text-[var(--text-primary)]'}`}>
                                         {line.replace(/^(assistant|ai|agent|user|customer):\s*/i, '')}
                                       </div>
                                     </div>
@@ -417,7 +453,7 @@ const SupportAgentConfig = () => {
             {/* ADVANCED TAB */}
             {activeTab === 'advanced' && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-2"><Settings className="text-[var(--accent)]" /> Advanced Settings</h3>
+                <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2"><Settings className="text-[var(--accent)]" /> Advanced Settings</h3>
                 <div className="p-6 bg-[var(--error)]/5 border border-[var(--error)]/20 rounded-[20px]">
                   <h4 className="text-[var(--error)] font-bold uppercase tracking-widest text-xs mb-2">Danger Zone</h4>
                   <p className="text-[var(--text-muted)] text-sm mb-6">Deactivating this agent will permanently disconnect the inbound number and delete its knowledge base vectors.</p>

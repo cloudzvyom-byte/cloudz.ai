@@ -133,7 +133,7 @@ const DashboardLayout = ({ children, user }) => {
             <div className="p-10 space-y-6">
               <div className="space-y-2">
                 <span className="text-[10px] font-black text-[var(--accent)] uppercase tracking-widest px-3 py-1 bg-[var(--accent-tint)] rounded-full">Global Announcement</span>
-                <h2 className="text-3xl font-medium tracking-tight text-white">{selectedArticle.title}</h2>
+                <h2 className="text-3xl font-medium tracking-tight text-[var(--text-primary)]">{selectedArticle.title}</h2>
                 <p className="text-xs text-[var(--text-muted)] font-bold uppercase tracking-widest">{new Date(selectedArticle.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
               </div>
               
@@ -163,7 +163,7 @@ const DashboardLayout = ({ children, user }) => {
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/dashboard')}>
             <OperonLogo size={24} />
             {!sidebarCollapsed && (
-              <span className="text-lg font-bold tracking-tight text-white group-hover:text-[var(--accent)] transition-colors whitespace-nowrap">Cloud AI</span>
+              <span className="text-lg font-bold tracking-tight text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors whitespace-nowrap">Cloud AI</span>
             )}
           </div>
         </div>
@@ -223,7 +223,7 @@ const DashboardLayout = ({ children, user }) => {
                       <item.icon size={20} className="text-[var(--text-muted)]" />
                       <span className="text-[14px] font-medium tracking-tight text-[var(--text-secondary)]">{item.name}</span>
                     </div>
-                    <p className="text-sm font-black uppercase tracking-tight text-black dark:text-white mb-1">Cloud Motivation</p>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] bg-[var(--bg-input)] px-2 py-0.5 rounded-md">Coming Soon</span>
                   </div>
                 ) : (
                   <NavLink
@@ -264,7 +264,7 @@ const DashboardLayout = ({ children, user }) => {
             </div>
             {!sidebarCollapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-[12px] font-bold truncate text-white">{user?.user_metadata?.full_name || user?.email?.split('@')[0]}</p>
+                <p className="text-[12px] font-bold truncate text-[var(--text-primary)]">{user?.user_metadata?.full_name || user?.email?.split('@')[0]}</p>
                 <button 
                   onClick={handleLogout} 
                   disabled={loggingOut}
@@ -301,7 +301,7 @@ const DashboardLayout = ({ children, user }) => {
             >
               {sidebarCollapsed ? <PanelLeft size={20} /> : <PanelLeftClose size={20} />}
             </button>
-            <h2 className="text-base font-medium text-white tracking-tight">
+            <h2 className="text-base font-medium text-[var(--text-primary)] tracking-tight">
               {NAV_ITEMS.find(i => i.path === location.pathname)?.name || 'Dashboard'}
             </h2>
           </div>
@@ -311,7 +311,7 @@ const DashboardLayout = ({ children, user }) => {
               <input 
                 type="text" 
                 placeholder="Search..." 
-                className="bg-[var(--bg-card)] border border-[var(--border)] rounded-[12px] py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-[var(--accent)] transition-all w-[320px]"
+                className="bg-[var(--bg-card)] border border-[var(--border)] rounded-[12px] py-2.5 pl-10 pr-4 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-all w-[320px]"
               />
               <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
             </div>
@@ -396,7 +396,7 @@ const DashboardLayout = ({ children, user }) => {
                           ) : (
                             notifications.map(n => (
                               <div key={n.id} onClick={() => markAsRead(n.id)} className={`p-4 rounded-[14px] border transition-all cursor-pointer ${n.read ? 'border-transparent opacity-50' : 'bg-[var(--bg-input)] border-[var(--border)] hover:border-[var(--accent)]'}`}>
-                                <h4 className="text-xs font-bold text-white mb-1">{n.title}</h4>
+                                <h4 className="text-xs font-bold text-[var(--text-primary)] mb-1">{n.title}</h4>
                                 <p className="text-[10px] text-[var(--text-secondary)] font-medium leading-relaxed">{n.message}</p>
                               </div>
                             ))
@@ -420,7 +420,7 @@ const DashboardLayout = ({ children, user }) => {
                                   </div>
                                 )}
                                 <div className="px-2 pb-2">
-                                  <h4 className="text-xs font-bold text-white mb-1 leading-tight group-hover:text-[var(--accent)] transition-colors">{item.title}</h4>
+                                  <h4 className="text-xs font-bold text-[var(--text-primary)] mb-1 leading-tight group-hover:text-[var(--accent)] transition-colors">{item.title}</h4>
                                   <p className="text-[10px] text-[var(--text-muted)] font-medium line-clamp-2 leading-relaxed">{item.description}</p>
                                   <div className="mt-3 flex items-center justify-between">
                                     <span className="text-[8px] font-black text-[var(--text-muted)] uppercase tracking-widest">{new Date(item.created_at).toLocaleDateString()}</span>

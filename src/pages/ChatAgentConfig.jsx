@@ -108,7 +108,7 @@ const ChatAgentConfig = () => {
   // Helper to test the chat in preview
   const handleTestChat = async (val) => {
     if (!userAssistantId) {
-      alert('Please Deploy Protocol first to initialize your neural agent.');
+      alert('Please Deploy first to initialize your neural agent.');
       return;
     }
     
@@ -148,7 +148,7 @@ const ChatAgentConfig = () => {
             <MessageCircle size={14} className="text-[var(--accent)]" />
             <span className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-widest">Chat Architecture</span>
           </div>
-          <h1 className="text-4xl font-medium tracking-tight text-white mb-2">Omnichannel <span className="text-[var(--accent)]">Chat Agent</span>.</h1>
+          <h1 className="text-4xl font-medium tracking-tight text-[var(--text-primary)] mb-2">Omnichannel <span className="text-[var(--accent)]">Chat Agent</span>.</h1>
           <p className="text-[var(--text-secondary)]">Configure and embed your AI chat widget across your platforms.</p>
         </div>
         
@@ -158,7 +158,7 @@ const ChatAgentConfig = () => {
           className="px-8 py-4 bg-[var(--accent)] text-[#0A0A0A] rounded-[16px] text-xs font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent-hover)] transition-all shadow-xl flex items-center gap-2"
         >
           {loading ? <div className="w-4 h-4 border-2 border-[#0A0A0A] border-t-transparent rounded-full animate-spin" /> : saved ? <Check size={16} /> : <Save size={16} />}
-          {loading ? 'Compiling...' : saved ? 'Deployed' : 'Deploy Protocol'}
+          {loading ? 'Compiling...' : saved ? 'Deployed' : 'Deploy'}
         </button>
       </header>
 
@@ -186,18 +186,18 @@ const ChatAgentConfig = () => {
           <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-[32px] p-8 min-h-[500px]">
             {activeTab === 'identity' && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-2">
+                <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2">
                   <MessageSquare className="text-[var(--accent)]" /> Identity & Prompt
                 </h3>
                 
                 <div className="space-y-4">
                   <label className="block text-xs font-bold text-[var(--text-secondary)] uppercase tracking-widest">Agent Name</label>
-                  <input type="text" value={config.name} onChange={e => setConfig({...config, name: e.target.value})} className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-white focus:border-[var(--accent)] outline-none transition-all" />
+                  <input type="text" value={config.name} onChange={e => setConfig({...config, name: e.target.value})} className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all" />
                 </div>
 
                 <div className="space-y-4">
                   <label className="block text-xs font-bold text-[var(--text-secondary)] uppercase tracking-widest">Welcome Message</label>
-                  <input type="text" value={config.greeting} onChange={e => setConfig({...config, greeting: e.target.value})} className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-white focus:border-[var(--accent)] outline-none transition-all" />
+                  <input type="text" value={config.greeting} onChange={e => setConfig({...config, greeting: e.target.value})} className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all" />
                 </div>
 
                 <div className="space-y-4">
@@ -206,7 +206,7 @@ const ChatAgentConfig = () => {
                     rows={6}
                     value={config.prompt}
                     onChange={e => setConfig({...config, prompt: e.target.value})}
-                    className="w-full bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] p-5 text-white focus:border-[var(--accent)] outline-none transition-all resize-none leading-relaxed"
+                    className="w-full bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] p-5 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all resize-none leading-relaxed"
                   />
                 </div>
               </div>
@@ -214,7 +214,7 @@ const ChatAgentConfig = () => {
 
             {activeTab === 'appearance' && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-2">
+                <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2">
                   <LayoutTemplate className="text-[var(--accent)]" /> Widget Appearance
                 </h3>
                 
@@ -228,7 +228,7 @@ const ChatAgentConfig = () => {
                         onChange={e => setConfig({...config, primaryColor: e.target.value})} 
                         className="w-14 h-14 rounded-[12px] bg-[var(--bg-input)] border border-[var(--border)] cursor-pointer" 
                       />
-                      <span className="text-white font-mono">{config.primaryColor}</span>
+                      <span className="text-[var(--text-primary)] font-mono">{config.primaryColor}</span>
                     </div>
                   </div>
 
@@ -237,7 +237,7 @@ const ChatAgentConfig = () => {
                     <select 
                       value={config.position}
                       onChange={e => setConfig({...config, position: e.target.value})}
-                      className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-white focus:border-[var(--accent)] outline-none transition-all"
+                      className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all"
                     >
                       <option value="bottom-right">Bottom Right</option>
                       <option value="bottom-left">Bottom Left</option>
@@ -247,7 +247,7 @@ const ChatAgentConfig = () => {
 
                 <div className="mt-8 p-6 bg-[var(--bg-input)] border border-[var(--border)] rounded-[20px] flex items-center justify-between">
                   <div>
-                    <h4 className="text-white font-medium mb-1">Remove Operon Branding</h4>
+                    <h4 className="text-[var(--text-primary)] font-medium mb-1">Remove Operon Branding</h4>
                     <p className="text-[var(--text-muted)] text-sm">Enterprise feature: hide "Powered by Operon AI" watermark.</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer opacity-50">
@@ -260,7 +260,7 @@ const ChatAgentConfig = () => {
 
             {activeTab === 'whatsapp' && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-2">
+                <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2">
                   <Globe className="text-[var(--accent)]" /> WhatsApp Business Protocol
                 </h3>
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed">Connect your VAPI Chat assistant directly to WhatsApp using Twilio or the Meta Business API. Your AI will respond using the same knowledge base configured in Identity & Prompt.</p>
@@ -273,12 +273,12 @@ const ChatAgentConfig = () => {
                       placeholder="+91 99999 99999"
                       value={config.whatsappNumber || ''} 
                       onChange={e => setConfig({...config, whatsappNumber: e.target.value})} 
-                      className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-white focus:border-[var(--accent)] outline-none transition-all" 
+                      className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all" 
                     />
                   </div>
                   <div className="space-y-4">
                     <label className="block text-xs font-bold text-[var(--text-secondary)] uppercase tracking-widest">Integration Provider</label>
-                    <select className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-white focus:border-[var(--accent)] outline-none transition-all">
+                    <select className="w-full h-14 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] px-5 text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all">
                       <option>Twilio Business</option>
                       <option>Meta Cloud API (Official)</option>
                       <option>360dialog</option>
@@ -287,7 +287,7 @@ const ChatAgentConfig = () => {
                 </div>
 
                 <div className="p-6 bg-[#0A0A0A] border border-[var(--border)] rounded-[20px] space-y-4">
-                  <h4 className="text-white font-medium text-sm flex items-center gap-2"><Code size={16} className="text-[var(--accent)]" /> Webhook Authorization URL</h4>
+                  <h4 className="text-[var(--text-primary)] font-medium text-sm flex items-center gap-2"><Code size={16} className="text-[var(--accent)]" /> Webhook Authorization URL</h4>
                   <p className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-widest leading-relaxed">Paste this URL into your Twilio/Meta dashboard to route WhatsApp messages to your AI.</p>
                   <div className="flex gap-4">
                     <input 
@@ -301,7 +301,7 @@ const ChatAgentConfig = () => {
 
                 <div className="p-8 bg-[var(--bg-input)] border border-[var(--accent)]/10 rounded-[24px] flex flex-col md:flex-row items-center justify-between gap-8">
                   <div className="text-center md:text-left">
-                    <h4 className="text-white font-medium text-lg mb-1">Live WhatsApp Status</h4>
+                    <h4 className="text-[var(--text-primary)] font-medium text-lg mb-1">Live WhatsApp Status</h4>
                     <p className="text-[var(--text-muted)] text-[10px] font-bold uppercase tracking-widest leading-relaxed">
                       {isWaConnected ? 'Neural Bridge Active • Agent intercepting inquiries' : 'Active Connection Required'}
                     </p>
@@ -350,7 +350,7 @@ const ChatAgentConfig = () => {
 
             {activeTab === 'embed' && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-2">
+                <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-2">
                   <Code className="text-[var(--accent)]" /> Embed Widget
                 </h3>
                 
@@ -369,7 +369,7 @@ const ChatAgentConfig = () => {
                       navigator.clipboard.writeText(embedCode);
                       alert('Copied to clipboard!');
                     }}
-                    className="absolute top-4 right-4 px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] text-white text-[10px] font-bold uppercase tracking-widest rounded-[8px] hover:border-[var(--accent)] transition-all"
+                    className="absolute top-4 right-4 px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] text-[10px] font-bold uppercase tracking-widest rounded-[8px] hover:border-[var(--accent)] transition-all"
                   >
                     Copy Code
                   </button>

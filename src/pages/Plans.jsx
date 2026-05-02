@@ -27,6 +27,7 @@ const AGENTS = [
     monthly: 9999,
     annual: 99990,
     savings: 19998,
+    comingSoon: true,
     features: ['Zero-Knowledge Auto-Learning', 'Instant Lead Qualification', 'Dynamic Routing Logic', 'Custom JSON Knowledge Base']
   },
   {
@@ -38,6 +39,7 @@ const AGENTS = [
     monthly: 9999,
     annual: 99990,
     savings: 19998,
+    comingSoon: true,
     features: ['Parallel Dialing (up to 5 lines)', 'Automated Objection Handling', 'DNC Compliance Registry', 'Integrated CRM Synchronization']
   },
   {
@@ -49,6 +51,7 @@ const AGENTS = [
     monthly: 9999,
     annual: 99990,
     savings: 19998,
+    comingSoon: true,
     features: ['Recursive Follow-up Loops', 'Advanced A/B Growth Testing', 'Spam-Safe Warming Engine', 'Intent-Based Auto-Responses']
   }
 ];
@@ -68,7 +71,7 @@ const Plans = () => {
           <Activity size={14} className="text-[var(--accent)]" />
           <span className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-[0.2em]">Deployment Tier Selection</span>
         </div>
-        <h1 className="text-5xl font-medium tracking-tighter text-white">Choose your <span className="text-[var(--accent)]">Neural</span> Workforce.</h1>
+        <h1 className="text-5xl font-medium tracking-tighter text-[var(--text-primary)]">Choose your <span className="text-[var(--accent)]">Neural</span> Workforce.</h1>
         <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto leading-relaxed">
           Select the specialized AI agents required for your operational scale. All plans include 256-bit encryption and 99.9% uptime.
         </p>
@@ -104,14 +107,14 @@ const Plans = () => {
               <div className={`w-12 h-12 rounded-[14px] bg-[var(--bg-input)] border border-[var(--border)] flex items-center justify-center ${agent.color} group-hover:scale-110 transition-transform`}>
                 <agent.icon size={24} />
               </div>
-              <h3 className="font-bold text-base tracking-tight text-white leading-tight">{agent.name}</h3>
+              <h3 className="font-bold text-base tracking-tight text-[var(--text-primary)] leading-tight">{agent.name}</h3>
             </div>
 
             <p className="text-xs text-[var(--text-muted)] leading-relaxed mb-8 flex-1">{agent.desc}</p>
 
             <div className="mb-10">
               <div className="flex items-baseline gap-1.5">
-                <span className="text-4xl font-medium tracking-tighter text-white">
+                <span className="text-4xl font-medium tracking-tighter text-[var(--text-primary)]">
                   {billing === 'monthly' ? formatPrice(agent.monthly) : formatPrice(agent.annual / 12)}
                 </span>
                 <span className="text-[var(--text-muted)] text-sm font-medium">/mo</span>
@@ -135,12 +138,18 @@ const Plans = () => {
               ))}
             </div>
 
-            <button 
-              onClick={() => navigate(`/payment?agent=${agent.id}&billing=${billing}`)}
-              className="w-full py-4 rounded-[18px] bg-[var(--bg-input)] border border-[var(--border)] text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent)] hover:text-[#0A0A0A] hover:border-[var(--accent)] transition-all flex items-center justify-center gap-2 group/btn shadow-lg"
-            >
-              Initialize Agent <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
-            </button>
+            {agent.comingSoon ? (
+              <div className="w-full py-4 rounded-[18px] bg-white/5 border border-white/5 text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 cursor-not-allowed">
+                Coming Soon <Sparkles size={14} className="opacity-50" />
+              </div>
+            ) : (
+              <button 
+                onClick={() => navigate(`/payment?agent=${agent.id}&billing=${billing}`)}
+                className="w-full py-4 rounded-[18px] bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] text-xs font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent)] hover:text-[#0A0A0A] hover:border-[var(--accent)] transition-all flex items-center justify-center gap-2 group/btn shadow-lg"
+              >
+                Initialize Agent <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+              </button>
+            )}
           </div>
         ))}
       </div>

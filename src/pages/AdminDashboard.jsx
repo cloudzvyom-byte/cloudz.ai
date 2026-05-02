@@ -382,6 +382,19 @@ const AdminDashboard = () => {
                   <button onClick={handleSaveVapiSettings} className="flex-1 py-5 bg-orange-500 text-black rounded-[16px] text-xs font-black uppercase tracking-widest hover:bg-orange-600 transition-all">Save Configuration</button>
                   <button onClick={testVapiConnection} className="px-10 py-5 bg-white/5 border border-white/10 text-white rounded-[16px] text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all">Test Connection</button>
                 </div>
+                
+                {/* Environment Status */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className={`p-3 rounded-[12px] border flex items-center justify-between ${import.meta.env.VITE_VAPI_PRIVATE_KEY ? 'bg-green-500/5 border-green-500/20 text-green-500' : 'bg-red-500/5 border-red-500/20 text-red-500'}`}>
+                    <span className="text-[8px] font-black uppercase tracking-widest">VAPI Key (ENV)</span>
+                    <span className="text-[8px] font-bold">{import.meta.env.VITE_VAPI_PRIVATE_KEY ? 'DETECTED' : 'MISSING'}</span>
+                  </div>
+                  <div className={`p-3 rounded-[12px] border flex items-center justify-between ${import.meta.env.VITE_RAZORPAY_KEY_ID ? 'bg-green-500/5 border-green-500/20 text-green-500' : 'bg-red-500/5 border-red-500/20 text-red-500'}`}>
+                    <span className="text-[8px] font-black uppercase tracking-widest">Razorpay (ENV)</span>
+                    <span className="text-[8px] font-bold">{import.meta.env.VITE_RAZORPAY_KEY_ID ? 'DETECTED' : 'MISSING'}</span>
+                  </div>
+                </div>
+
                 {vapiTestStatus && (
                   <div className={`p-5 rounded-[16px] text-xs font-black uppercase tracking-widest text-center border mt-4 ${vapiTestStatus.includes('Connected') ? 'bg-green-500/10 text-green-500 border-green-500/20' : vapiTestStatus.includes('Testing') ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' : 'bg-red-500/10 text-red-500 border-red-500/20'}`}>
                     {vapiTestStatus}

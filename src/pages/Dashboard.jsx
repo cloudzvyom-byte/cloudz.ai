@@ -23,7 +23,7 @@ const StatCard = ({ label, value, change, trend, icon: Icon, color }) => (
     </div>
     <div>
       <p className="text-[var(--text-muted)] text-[10px] font-bold uppercase tracking-[0.2em] mb-2">{label}</p>
-      <h3 className="text-4xl font-medium tracking-tighter text-white">{value}</h3>
+      <h3 className="text-4xl font-medium tracking-tighter text-[var(--text-primary)]">{value}</h3>
     </div>
   </div>
 );
@@ -124,7 +124,7 @@ const Dashboard = () => {
           <div className="flex items-center gap-4">
             <div className="w-2 h-2 rounded-full bg-[var(--success)] animate-ping" />
             <span className="text-[10px] font-black uppercase tracking-widest text-[var(--success)]">Live Call In Progress</span>
-            <span className="text-sm font-medium text-white">{liveCall.customer?.number || 'Private Caller'}</span>
+            <span className="text-sm font-medium text-[var(--text-primary)]">{liveCall.customer?.number || 'Private Caller'}</span>
           </div>
           <div className="text-[10px] font-bold text-white/60 uppercase tracking-widest">
             Routing to Customer Support Assistant
@@ -140,9 +140,9 @@ const Dashboard = () => {
               {isLoading ? "Synchronizing Telemetry..." : "Neural Grid Operational"}
             </span>
           </div>
-          <h1 className="text-5xl font-medium tracking-tighter text-white">System <span className="text-[var(--accent)]">Overview</span>.</h1>
+          <h1 className="text-5xl font-medium tracking-tighter text-[var(--text-primary)]">System <span className="text-[var(--accent)]">Overview</span>.</h1>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed max-w-xl">
-            Vyom, your neural workforce is currently <span className="text-white font-medium">active</span>. Monitoring <span className="text-[var(--accent)] font-bold">{stats.throughput}</span> total interaction nodes.
+            Vyom, your neural workforce is currently <span className="text-[var(--text-primary)] font-medium">active</span>. Monitoring <span className="text-[var(--accent)] font-bold">{stats.throughput}</span> total interaction nodes.
           </p>
         </div>
         
@@ -195,7 +195,7 @@ const Dashboard = () => {
       {/* Recent Activity Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 space-y-6">
-          <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-3">
+          <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-3">
             <Activity size={20} className="text-[var(--accent)]" /> 
             Recent Operational Nodes
           </h3>
@@ -208,7 +208,7 @@ const Dashboard = () => {
                       {node.type === 'Inbound' ? <PhoneIncoming size={16} /> : <Phone size={16} className="rotate-[135deg]" />}
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white">{node.client}</p>
+                      <p className="text-sm font-bold text-[var(--text-primary)]">{node.client}</p>
                       <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">{node.type} Node · {node.time}</p>
                     </div>
                   </div>
@@ -230,7 +230,7 @@ const Dashboard = () => {
         </div>
 
         <div className="space-y-6">
-          <h3 className="text-xl font-medium text-white tracking-tight flex items-center gap-3">
+          <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight flex items-center gap-3">
             <Zap size={20} className="text-[var(--accent)]" /> 
             System Insights
           </h3>

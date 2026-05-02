@@ -6,6 +6,7 @@ import {
   ArrowRight, Cpu, Plus
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { getVapiSettings } from '../lib/vapi';
 
 const AGENTS = {
   'voice-support': { name: 'Customer Voice Support Agent', price: 9999, icon: Zap },
@@ -59,9 +60,15 @@ const Payment = () => {
       return;
     }
 
-    // Fetch dynamic Razorpay key from admin settings
-    const vapiSettings = JSON.parse(localStorage.getItem('vapi_settings')) || {};
-    const razorpayKey = vapiSettings.razorpayKeyId || "rzp_test_your_key_id";
+    // Fetch dynamic Razorpay key from admin settings (with Env fallback)
+    const settings = getVapiSettings();
+    const razorpayKey = settings.razorpayKeyId;
+    
+    if (!razorpayKey) {
+      alert('Razorpay Configuration Missing. Please set your Razorpay Key ID in the Admin Dashboard or Environment Variables.');
+      setPaymentStep('init');
+      return;
+    }
     
     const options = {
       key: razorpayKey, 
@@ -135,7 +142,7 @@ const Payment = () => {
         <div className="w-24 h-24 bg-[var(--success)]/10 border-2 border-[var(--success)] rounded-full flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(29,158,117,0.2)]">
           <Check size={48} className="text-[var(--success)] stroke-[3px]" />
         </div>
-        <h2 className="text-4xl font-medium text-white mb-4 tracking-tight text-center">Authorization <span className="text-[var(--success)]">Successful</span>.</h2>
+        <h2 className="text-4xl font-medium text-[var(--text-primary)] mb-4 tracking-tight text-center">Authorization <span className="text-[var(--success)]">Successful</span>.</h2>
         <p className="text-[var(--text-secondary)] text-center max-w-md mb-12 font-medium">
           {type === 'topup' ? 'Credits have been injected into your neural buffer.' : 'Neural node provisioned. Your AI agent is now being initialized.'}
         </p>
@@ -163,7 +170,7 @@ const Payment = () => {
         {/* LEFT: ORDER SUMMARY */}
         <div className="lg:col-span-3 space-y-8">
           <header className="space-y-4">
-            <h1 className="text-4xl font-medium tracking-tight text-white">
+            <h1 className="text-4xl font-medium tracking-tight text-[var(--text-primary)]">
               {type === 'topup' ? 'Infect' : 'Finalize'} <span className="text-[var(--accent)]">{type === 'topup' ? 'Credits' : 'Provisioning'}</span>.
             </h1>
             <p className="text-[var(--text-secondary)] text-base font-medium">Review your operational parameters before authorizing the deployment.</p>
@@ -181,10 +188,10 @@ const Payment = () => {
                       className={`p-6 rounded-[20px] border-2 transition-all text-left flex justify-between items-center ${selectedBundle.id === bundle.id ? 'border-[var(--accent)] bg-[var(--accent-tint)]' : 'border-[var(--border)] bg-[var(--bg-input)] hover:border-gray-500'}`}
                     >
                       <div>
-                        <h4 className="font-bold text-white uppercase tracking-widest text-xs">{bundle.name}</h4>
+                        <h4 className="font-bold text-[var(--text-primary)] uppercase tracking-widest text-xs">{bundle.name}</h4>
                         <p className="text-[10px] text-[var(--text-muted)] font-black mt-1">{bundle.credits} NEURAL CREDITS</p>
                       </div>
-                      <span className="text-lg font-medium text-white">₹{bundle.price.toLocaleString()}</span>
+                      <span className="text-lg font-medium text-[var(--text-primary)]">₹{bundle.price.toLocaleString()}</span>
                     </button>
                   ))}
                 </div>
@@ -196,7 +203,7 @@ const Payment = () => {
                     <agent.icon size={32} />
                   </div>
                   <div>
-                    <h3 className="text-xl font-medium text-white tracking-tight">{agent.name}</h3>
+                    <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight">{agent.name}</h3>
                     <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mt-1">Tier-1 Neural Agent</p>
                   </div>
                 </div>
@@ -222,14 +229,14 @@ const Payment = () => {
 
                   <div className="flex justify-between items-center py-4 border-y border-[var(--border)]/50 border-dashed">
                     <span className="text-sm text-[var(--text-secondary)] font-medium">Base Provisioning Fee</span>
-                    <span className="text-sm text-white font-bold">₹{agent.price.toLocaleString()}</span>
+                    <span className="text-sm text-[var(--text-primary)] font-bold">₹{agent.price.toLocaleString()}</span>
                   </div>
                 </div>
               </>
             )}
 
             <div className="flex justify-between items-center pt-2">
-              <span className="text-lg font-medium text-white tracking-tight">Total Authorization</span>
+              <span className="text-lg font-medium text-[var(--text-primary)] tracking-tight">Total Authorization</span>
               <div className="text-right">
                 <span className="block text-2xl font-medium text-[var(--accent)] tracking-tight">₹{finalPrice.toLocaleString()}</span>
                 <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-widest">INC. ALL PROTOCOL TAXES</span>
@@ -251,7 +258,7 @@ const Payment = () => {
              >
                 <div className="flex items-center gap-4">
                   <CreditCard size={20} className="text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-colors" />
-                  <span className="text-xs font-bold text-white uppercase tracking-widest">Razorpay</span>
+                  <span className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-widest">Razorpay</span>
                 </div>
                 <ArrowRight size={14} className="text-[var(--text-muted)] group-hover:translate-x-1 transition-transform" />
              </button>
@@ -259,7 +266,7 @@ const Payment = () => {
              <button className="w-full h-16 bg-[var(--bg-input)] border border-[var(--border)] rounded-[16px] flex items-center justify-between px-6 hover:border-[#0070BA] hover:bg-[#0070BA]/5 transition-all group opacity-50 cursor-not-allowed">
                 <div className="flex items-center gap-4">
                   <div className="w-5 h-5 bg-[#0070BA] rounded-full flex items-center justify-center text-white text-[8px] font-black">P</div>
-                  <span className="text-xs font-bold text-white uppercase tracking-widest">PayPal</span>
+                  <span className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-widest">PayPal</span>
                 </div>
                 <Lock size={12} className="text-[var(--text-muted)]" />
              </button>
@@ -267,7 +274,7 @@ const Payment = () => {
              <div className="pt-6 border-t border-[var(--border)] mt-4">
                <div className="flex items-center gap-3 mb-4">
                  <ShieldCheck size={16} className="text-[var(--success)]" />
-                 <span className="text-[9px] font-bold text-white uppercase tracking-widest">End-to-End Encryption</span>
+                 <span className="text-[9px] font-bold text-[var(--text-primary)] uppercase tracking-widest">End-to-End Encryption</span>
                </div>
                <p className="text-[9px] text-[var(--text-muted)] leading-relaxed font-medium">
                  Your authorization is processed through secure neural nodes. No credit card telemetry is stored on our local buffers.

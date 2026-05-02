@@ -1,8 +1,10 @@
 export const getVapiSettings = (overrides = {}) => {
-  const global = JSON.parse(localStorage.getItem('vapi_settings')) || { 
-    privateKey: import.meta.env.VITE_VAPI_PRIVATE_KEY || '', 
-    assistantId: import.meta.env.VITE_VAPI_ASSISTANT_ID || '', 
-    phoneNumberId: import.meta.env.VITE_VAPI_PHONE_NUMBER_ID || '' 
+  const local = JSON.parse(localStorage.getItem('vapi_settings')) || {};
+  const global = { 
+    privateKey: local.privateKey || import.meta.env.VITE_VAPI_PRIVATE_KEY || '', 
+    assistantId: local.assistantId || import.meta.env.VITE_VAPI_ASSISTANT_ID || '', 
+    phoneNumberId: local.phoneNumberId || import.meta.env.VITE_VAPI_PHONE_NUMBER_ID || '',
+    razorpayKeyId: local.razorpayKeyId || import.meta.env.VITE_RAZORPAY_KEY_ID || ''
   };
   return { ...global, ...overrides };
 };
@@ -63,11 +65,14 @@ export const makeVapiCall = async (lead, campaign, options = {}) => {
   return data;
 };
 
-export const triggerSupportCall = async (customerPhone, customerName, assistantId) => {
-  const settings = getVapiSettings(assistantId ? { assistantId } : {});
+export const triggerSupportCall = async (customerPhone, customerName, assistantId, phoneNumberId) => {
+  const overrides = {};
+  if (assistantId) overrides.assistantId = assistantId;
+  if (phoneNumberId) overrides.phoneNumberId = phoneNumberId;
+  const settings = getVapiSettings(overrides);
   
   if (!settings.privateKey || !settings.assistantId || !settings.phoneNumberId) {
-    throw new Error('VAPI configuration missing for Support Agent.');
+    throw new Error('VAPI configuration missing for Support Agent. Missing privateKey, assistantId, or phoneNumberId.');
   }
 
   const response = await fetch('https://api.vapi.ai/call/phone', {

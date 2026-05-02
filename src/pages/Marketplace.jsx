@@ -29,7 +29,7 @@ const AGENTS = [
     description: 'Instant web & app support agent. Learns from your entire knowledge base to provide expert-level technical support.',
     icon: MessageSquare,
     ramp: 'teal',
-    comingSoon: false,
+    comingSoon: true,
     includes: ['Real-time Doc Learning', 'Multi-Platform Handover', 'Sentiment-Based Routing']
   },
   {
@@ -40,7 +40,7 @@ const AGENTS = [
     description: 'Autonomous outbound dialing engine. Scales your sales reach with parallel calling and automated objection handling.',
     icon: Headset,
     ramp: 'coral',
-    comingSoon: false,
+    comingSoon: true,
     includes: ['Parallel Line Scaling', 'DNC Compliance Shield', 'Automated Dispositioning']
   },
   {
@@ -51,7 +51,7 @@ const AGENTS = [
     description: 'Hyper-personalized email outreach. Researches every prospect using real-time social data to maximize conversion.',
     icon: Mail,
     ramp: 'blue',
-    comingSoon: false,
+    comingSoon: true,
     includes: ['Prospect Data Scraping', 'Deliverability Monitoring', 'Infinite Follow-up Loops']
   }
 ];
@@ -85,7 +85,7 @@ const Marketplace = () => {
           <Cpu size={12} className="text-[var(--accent)]" />
           <span className="text-[9px] font-black text-[var(--accent)] uppercase tracking-widest">Neural Marketplace v4.0</span>
         </div>
-        <h1 className="text-4xl font-medium tracking-tight text-white">Provision <span className="text-[var(--accent)]">Intelligence</span>.</h1>
+        <h1 className="text-4xl font-medium tracking-tight text-[var(--text-primary)]">Provision <span className="text-[var(--accent)]">Intelligence</span>.</h1>
         <p className="text-[var(--text-secondary)] text-base max-w-2xl leading-relaxed font-medium">
           Select from our tier-1 pre-trained AI agents to automate complex business workflows and outbound operations.
         </p>
@@ -116,14 +116,14 @@ const Marketplace = () => {
                 </div>
                 {!isOwned && (
                   <div className="text-right">
-                    <span className="block text-2xl font-medium text-white tracking-tight">{agent.price}</span>
+                    <span className="block text-2xl font-medium text-[var(--text-primary)] tracking-tight">{agent.price}</span>
                     <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">/Monthly Protocol</span>
                   </div>
                 )}
               </div>
               
               <div className="flex-1 relative z-10 mb-8">
-                <h3 className="text-xl font-medium mb-3 text-white group-hover:text-[var(--accent)] transition-colors tracking-tight">{agent.name}</h3>
+                <h3 className="text-xl font-medium mb-3 text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors tracking-tight">{agent.name}</h3>
                 <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-6 font-medium opacity-80">
                   {agent.description}
                 </p>
@@ -158,8 +158,7 @@ const Marketplace = () => {
                     }
                   }}
                   className={`relative z-10 w-full py-4 rounded-[12px] border transition-all duration-300 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] ${
-                    isOwned 
-                      ? 'bg-[var(--bg-input)] border-[var(--border)] text-white hover:border-[var(--accent)] hover:bg-[var(--bg-hover)]' 
+                      ? 'bg-[var(--bg-input)] border-[var(--border)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--bg-hover)]' 
                       : 'bg-[var(--accent)] border-[var(--accent)] text-[#0A0A0A] hover:bg-[var(--accent-hover)] shadow-lg shadow-[var(--accent)]/20'
                   }`}
                 >

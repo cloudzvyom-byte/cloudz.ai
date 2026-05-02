@@ -18,7 +18,7 @@ const CampaignList = ({ onNew, campaigns, onToggleStatus, onDelete, onOpenDialer
           <Rocket size={12} className="text-[var(--accent)]" />
           <span className="text-[9px] font-black text-[var(--accent)] uppercase tracking-widest">Outbound Engine Active</span>
         </div>
-        <h1 className="text-4xl font-medium tracking-tight text-white">Campaign <span className="text-[var(--accent)]">Center</span>.</h1>
+        <h1 className="text-4xl font-medium tracking-tight text-[var(--text-primary)]">Campaign <span className="text-[var(--accent)]">Center</span>.</h1>
         <p className="text-[var(--text-secondary)] text-base font-medium max-w-xl">Orchestrate and scale your autonomous Sales Dialer operations with real-time telemetry.</p>
       </div>
       <button 
@@ -34,7 +34,7 @@ const CampaignList = ({ onNew, campaigns, onToggleStatus, onDelete, onOpenDialer
         <div className="w-16 h-16 bg-[var(--bg-input)] rounded-[16px] flex items-center justify-center mx-auto mb-8 border border-[var(--border)]">
           <Cpu size={32} className="text-[var(--text-muted)]" />
         </div>
-        <h2 className="text-2xl font-medium mb-3 text-white tracking-tight">No Operational Campaigns</h2>
+        <h2 className="text-2xl font-medium mb-3 text-[var(--text-primary)] tracking-tight">No Operational Campaigns</h2>
         <p className="text-[var(--text-secondary)] max-w-xs mx-auto mb-10 font-medium text-sm">
           Initialize a new deployment to begin high-velocity lead engagement via neural voice nodes.
         </p>
@@ -54,12 +54,12 @@ const CampaignList = ({ onNew, campaigns, onToggleStatus, onDelete, onOpenDialer
             <input 
               type="text" 
               placeholder="Search campaigns"
-              className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-[12px] py-3.5 pl-12 pr-6 text-sm text-white focus:outline-none focus:border-[var(--accent)] transition-all shadow-sm"
+              className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-[12px] py-3.5 pl-12 pr-6 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-all shadow-sm"
             />
           </div>
           <button 
             onClick={onOpenDialer}
-            className="px-8 py-3.5 rounded-[12px] bg-[var(--bg-card)] border border-[var(--border)] text-white hover:bg-[var(--bg-hover)] hover:border-[var(--text-muted)] transition-all flex items-center gap-3 font-medium text-sm shadow-sm"
+            className="px-8 py-3.5 rounded-[12px] bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)] hover:border-[var(--text-muted)] transition-all flex items-center gap-3 font-medium text-sm shadow-sm"
           >
             <Grid3x3 size={16} className="text-[var(--text-muted)]" /> Dial
           </button>
@@ -85,7 +85,7 @@ const CampaignList = ({ onNew, campaigns, onToggleStatus, onDelete, onOpenDialer
                         <Phone size={20} />
                       </div>
                       <div>
-                        <p className="font-bold text-white text-sm tracking-tight">{c.name}</p>
+                        <p className="font-bold text-[var(--text-primary)] text-sm tracking-tight">{c.name}</p>
                         <p className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest mt-0.5">Sales Dialer • {c.created}</p>
                       </div>
                     </div>
@@ -101,7 +101,7 @@ const CampaignList = ({ onNew, campaigns, onToggleStatus, onDelete, onOpenDialer
                       </span>
                     )}
                   </td>
-                  <td className="px-8 py-6 font-bold text-white tracking-widest">{c.dials || '0'}</td>
+                  <td className="px-8 py-6 font-bold text-[var(--text-primary)] tracking-widest">{c.dials || '0'}</td>
                   <td className="px-8 py-6">
                     <div className="w-full h-1.5 bg-[var(--bg-input)] rounded-full overflow-hidden border border-[var(--border)]">
                       <div className={`h-full rounded-full ${c.status === 'paused' ? 'bg-[var(--warning)]' : 'bg-[var(--accent)]'}`} style={{ width: c.progress || '0%' }} />
@@ -170,10 +170,10 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
                 onBlur={() => setIsEditingName(false)}
                 onKeyDown={(e) => e.key === 'Enter' && setIsEditingName(false)}
-                className="bg-transparent border-b border-[var(--accent)] text-xl font-medium tracking-tight text-white focus:outline-none"
+                className="bg-transparent border-b border-[var(--accent)] text-xl font-medium tracking-tight text-[var(--text-primary)] focus:outline-none"
               />
             ) : (
-              <h2 className="text-xl font-medium tracking-tight text-white">{formData.name}</h2>
+              <h2 className="text-xl font-medium tracking-tight text-[var(--text-primary)]">{formData.name}</h2>
             )}
             <button onClick={() => setIsEditingName(true)} className="p-1 text-[var(--text-muted)] hover:text-white transition-colors rounded-full hover:bg-[var(--bg-hover)]">
               <Edit2 size={14} />
@@ -198,7 +198,7 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
                   <div className="flex gap-3">
                     <Activity size={20} className="text-[var(--text-secondary)] mt-0.5" />
                     <div>
-                      <p className="font-bold text-white text-sm">Power Dialer</p>
+                      <p className="font-bold text-[var(--text-primary)] text-sm">Power Dialer</p>
                       <p className="text-xs text-[var(--text-muted)] font-medium mt-1.5 leading-relaxed">Power dialer dials one prospect at a time, connecting you only if the prospect picks up, minimising disconnected calls.</p>
                     </div>
                   </div>
@@ -214,7 +214,7 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
                   <div className="flex gap-3">
                     <Zap size={20} className="text-[var(--text-secondary)] mt-0.5" />
                     <div>
-                      <p className="font-bold text-white text-sm">Parallel Dialer</p>
+                      <p className="font-bold text-[var(--text-primary)] text-sm">Parallel Dialer</p>
                       <p className="text-xs text-[var(--text-muted)] font-medium mt-1.5 leading-relaxed">Parallel Dialer dials multiple prospects simultaneously, connecting you only if the prospect picks up, minimising downtime.</p>
                     </div>
                   </div>
@@ -231,7 +231,7 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
               <select 
                 value={formData.callVia}
                 onChange={(e) => setFormData({...formData, callVia: e.target.value})}
-                className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-[8px] px-4 py-3.5 text-sm text-white appearance-none focus:outline-none focus:border-[var(--accent)] transition-all"
+                className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-[8px] px-4 py-3.5 text-sm text-[var(--text-primary)] appearance-none focus:outline-none focus:border-[var(--accent)] transition-all"
               >
                 <option value="Specific numbers only">Specific numbers only</option>
                 <option value="Round Robin">Round Robin</option>
@@ -248,7 +248,7 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
               <select 
                 value={formData.selectedNumber}
                 onChange={(e) => setFormData({...formData, selectedNumber: e.target.value})}
-                className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-[8px] px-4 py-3.5 text-sm text-white appearance-none focus:outline-none focus:border-[var(--accent)] transition-all"
+                className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-[8px] px-4 py-3.5 text-sm text-[var(--text-primary)] appearance-none focus:outline-none focus:border-[var(--accent)] transition-all"
               >
                 <option value="+12546934939">+12546934939</option>
                 <option value="+19876543210">+19876543210</option>
@@ -265,7 +265,7 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
                 type="number"
                 value={formData.cooldown}
                 onChange={(e) => setFormData({...formData, cooldown: parseInt(e.target.value) || 0})}
-                className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-[8px] px-4 py-3.5 text-sm text-white focus:outline-none focus:border-[var(--accent)] transition-all"
+                className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-[8px] px-4 py-3.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-all"
               />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[var(--text-muted)]">second(s)</span>
             </div>
@@ -282,7 +282,7 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
                 <div className="flex gap-4 items-center">
                   <ListVideo size={20} className="text-[var(--text-secondary)]" />
                   <div>
-                    <p className="font-bold text-white text-sm">Select a list</p>
+                    <p className="font-bold text-[var(--text-primary)] text-sm">Select a list</p>
                     <p className="text-xs text-[var(--text-muted)] font-medium mt-0.5">Select an existing list</p>
                   </div>
                 </div>
@@ -295,7 +295,7 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
                 <div className="flex gap-4 items-center">
                   <CloudUpload size={20} className="text-[var(--text-secondary)]" />
                   <div>
-                    <p className="font-bold text-white text-sm">Upload leads</p>
+                    <p className="font-bold text-[var(--text-primary)] text-sm">Upload leads</p>
                     <p className="text-xs text-[var(--text-muted)] font-medium mt-0.5">Provide a CSV of leads</p>
                   </div>
                 </div>
@@ -310,7 +310,7 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
                 {formData.recordCalls && <Check size={14} strokeWidth={3} />}
               </div>
               <input type="checkbox" className="hidden" checked={formData.recordCalls} onChange={() => setFormData({...formData, recordCalls: !formData.recordCalls})} />
-              <span className="text-sm font-medium text-white">Enable default call recording for all calls in this campaign</span>
+              <span className="text-sm font-medium text-[var(--text-primary)]">Enable default call recording for all calls in this campaign</span>
             </label>
 
             <label className="flex items-center gap-3 cursor-pointer group">
@@ -318,7 +318,7 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
                 {formData.respectDNC && <Check size={14} strokeWidth={3} />}
               </div>
               <input type="checkbox" className="hidden" checked={formData.respectDNC} onChange={() => setFormData({...formData, respectDNC: !formData.respectDNC})} />
-              <span className="text-sm font-medium text-white flex items-center gap-2">Respect Do-Not-Call (DNC) lists <Shield size={14} className="text-[var(--text-muted)]" /></span>
+              <span className="text-sm font-medium text-[var(--text-primary)] flex items-center gap-2">Respect Do-Not-Call (DNC) lists <Shield size={14} className="text-[var(--text-muted)]" /></span>
             </label>
 
             <label className="flex items-center gap-3 cursor-pointer group">
@@ -335,7 +335,7 @@ const NewCampaignForm = ({ onCancel, onCreated }) => {
 
       {/* Footer */}
       <div className="px-10 py-5 border-t border-[var(--border)] bg-[var(--bg-app)] flex justify-end gap-3 sticky bottom-0 z-10">
-        <button onClick={onCancel} className="px-6 py-2.5 rounded-[8px] bg-transparent text-sm font-medium text-white hover:bg-[var(--bg-hover)] transition-all">
+        <button onClick={onCancel} className="px-6 py-2.5 rounded-[8px] bg-transparent text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-all">
           Cancel
         </button>
         <button onClick={handleCreate} className="px-6 py-2.5 rounded-[8px] bg-[#E0E0E0] text-sm font-medium text-black hover:bg-white transition-all shadow-sm">
@@ -427,7 +427,7 @@ const Campaigns = () => {
                 <div className="w-10 h-10 rounded-full bg-[var(--accent-tint)] flex items-center justify-center border border-[var(--accent)]/20">
                   <Grid3x3 size={18} className="text-[var(--accent)]" />
                 </div>
-                <h3 className="text-xl font-medium text-white tracking-tight">Manual Dial</h3>
+                <h3 className="text-xl font-medium text-[var(--text-primary)] tracking-tight">Manual Dial</h3>
               </div>
               <button onClick={() => setShowDialer(false)} className="p-2 text-[var(--text-muted)] hover:text-white transition-colors">
                 <X size={20} />
@@ -443,7 +443,7 @@ const Campaigns = () => {
                   placeholder="+1 (555) 000-0000"
                   value={dialNumber}
                   onChange={(e) => setDialNumber(e.target.value)}
-                  className="w-full bg-[var(--bg-input)] border border-[var(--border)] rounded-[12px] px-6 py-4 text-lg font-medium text-white tracking-wider focus:outline-none focus:border-[var(--accent)] transition-all text-center"
+                  className="w-full bg-[var(--bg-input)] border border-[var(--border)] rounded-[12px] px-6 py-4 text-lg font-medium text-[var(--text-primary)] tracking-wider focus:outline-none focus:border-[var(--accent)] transition-all text-center"
                 />
               </div>
 
