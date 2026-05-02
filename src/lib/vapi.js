@@ -244,6 +244,42 @@ export const createVapiAssistant = async (payload) => {
   return data;
 };
 
+export const getVapiCallsByAssistant = async (assistantId) => {
+  const settings = await getVapiSettings();
+  if (!settings.privateKey) throw new Error('VAPI Private Key missing.');
+
+  const response = await fetch(`https://api.vapi.ai/call?assistantId=${assistantId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${settings.privateKey}`
+    }
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || 'API Error during assistant calls lookup');
+  return data;
+};
+
+export const uploadVapiFile = async (file) => {
+  const settings = await getVapiSettings();
+  if (!settings.privateKey) throw new Error('VAPI Private Key missing.');
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch('https://api.vapi.ai/file', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${settings.privateKey}`
+    },
+    body: formData
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || 'Failed to upload file to VAPI');
+  return data;
+};
+
 export const sendVapiChatMessage = async (messages, assistantId) => {
   const settings = await getVapiSettings();
   if (!settings.privateKey) throw new Error('VAPI Private Key missing.');
