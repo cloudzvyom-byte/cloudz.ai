@@ -19,7 +19,6 @@ export default async function handler(req, res) {
     switch(type) {
 
       case 'call-started': {
-        // Find which user owns this phone number
         const { data: profile } = await supabase
           .from('profiles')
           .select('id, business_name')
@@ -62,29 +61,18 @@ export default async function handler(req, res) {
         const summary = body.summary || ''
         const structuredData = body.analysis?.structuredData || {}
 
-        // Check structured data first
         let meetingBooked = structuredData.appointmentBooked || false
         let appointmentDate = structuredData.appointmentDate || null
         let appointmentTime = structuredData.appointmentTime || null
         let callerName = structuredData.callerName || null
 
-        // Fallback: keyword detection on transcript
         if (!meetingBooked) {
           const text = (transcript + ' ' + summary).toLowerCase()
           const keywords = [
-            'appointment booked',
-            'meeting scheduled',
-            'confirmed for',
-            'see you on',
-            'booked for',
-            'appointment on',
-            'haan aaunga',
-            'kal milte hain',
-            'book kar diya',
-            'slot confirm',
-            'appointment confirm',
-            'i will come',
-            'we are confirmed'
+            'appointment booked', 'meeting scheduled',
+            'confirmed for', 'see you on', 'booked for',
+            'haan aaunga', 'kal milte hain', 'book kar diya',
+            'slot confirm', 'i will come'
           ]
           meetingBooked = keywords.some(k => text.includes(k))
         }
@@ -100,10 +88,36 @@ export default async function handler(req, res) {
           })
           .eq('vapi_call_id', call.id)
 
-        // Create appointment record if booked
         if (meetingBooked) {
-          // Get user_id from call log
           const { data: callLog } = await supabase
             .from('call_logs')
             .select('user_id, caller_number')
-            .eq('vapi_call_id', call.
+            .eq('vapi_call_id', call.id)
+            .single()
+
+          if (callLog) {
+            await supabase.from('appointments').insert({
+              user_id: callLog.user_id,
+              caller_name: callerName || 'Unknown',
+              caller_number: callLog.caller_number,
+              appointment_date: appointmentDate,
+              appointment_time: appointmentTime,
+              source: 'voice_agent',
+              status: 'confirmed'
+            })
+          }
+        }
+        break
+      }
+
+      default:
+        console.log('Unhandled webhook type:', type)
+    }
+
+    return res.status(200).json({ received: true })
+
+  } catch (err) {
+    console.error('Webhook error:', err.message)
+    return res.status(500).json({ error: err.message })
+  }
+}
