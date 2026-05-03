@@ -199,31 +199,6 @@ const SupportAgentConfig = () => {
         </p>
       </div>
 
-      {/* MOBILE TESTING SECTION */}
-      <div className="bg-[var(--bg-card)]/50 rounded-[12px] border-[0.5px] border-[var(--border)] p-5 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div>
-          <h4 className="text-sm font-medium text-[var(--text-primary)]">Test Your Agent</h4>
-          <p className="text-[var(--text-muted)] text-[10px] font-bold uppercase tracking-widest opacity-60">Send a test call to verify your agent is working</p>
-        </div>
-        <div className="flex gap-3 w-full md:w-auto">
-          <input 
-            type="text" 
-            placeholder="Your Phone (e.g. +91...)" 
-            value={testPhone} 
-            onChange={e => setTestPhone(e.target.value)}
-            className="flex-1 md:w-48 h-10 bg-[var(--bg-input)] border border-[var(--border)] rounded-[8px] px-4 text-xs text-[var(--text-primary)] focus:border-[var(--accent)] outline-none transition-all"
-          />
-          <button 
-            onClick={handleTestCall} 
-            disabled={isCalling}
-            className="px-6 py-2 bg-[var(--accent)] text-[#0A0A0A] rounded-[8px] text-[10px] font-black uppercase tracking-widest hover:bg-[var(--accent-hover)] transition-all flex items-center gap-2 disabled:opacity-50"
-          >
-            {isCalling ? <Loader2 size={12} className="animate-spin" /> : <PhoneCall size={12} />}
-            {isCalling ? 'Calling...' : 'Call My Phone'}
-          </button>
-        </div>
-      </div>
-
       {/* CALL LOGS SECTION */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">

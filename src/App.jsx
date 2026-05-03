@@ -21,6 +21,7 @@ import Payment from './pages/Payment';
 import AdminDashboard from './pages/AdminDashboard';
 import SupportAgentConfig from './pages/SupportAgentConfig';
 import ChatAgentConfig from './pages/ChatAgentConfig';
+import Signup from './pages/Signup';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Security from './pages/Security';
@@ -124,6 +125,7 @@ function AnimatedRoutes({ session, isBlocked, authLoading }) {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       
       <Route path="/dashboard" element={<ProtectedRoute session={session} isBlocked={isBlocked}><Dashboard /></ProtectedRoute>} />
       <Route path="/assistant" element={<ProtectedRoute session={session} isBlocked={isBlocked}><Assistant /></ProtectedRoute>} />
