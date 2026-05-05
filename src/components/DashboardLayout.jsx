@@ -10,8 +10,10 @@ import {
   LogOut, Search, User, ChevronRight, Zap,
   Activity, Sparkles, Command, Check, X, Clock,
   Newspaper, Info, ArrowRight, ExternalLink,
-  MessageSquare, PanelLeftClose, PanelLeft
+  MessageSquare, PanelLeftClose, PanelLeft, Mic, Square
 } from 'lucide-react';
+import Vapi from '@vapi-ai/web';
+
 
 /* ─── Operon Logo ────────────────────────────────────────────────── */
 export const OperonLogo = ({ size = 28 }) => (
@@ -33,6 +35,90 @@ export const OperonLogo = ({ size = 28 }) => (
     </svg>
   </div>
 );
+
+const VoiceAssistantWidget = ({ collapsed }) => {
+  const [callActive, setCallActive] = useState(false);
+  const [vapi, setVapi] = useState(null);
+
+  React.useEffect(() => {
+    const v = new Vapi(import.meta.env.VITE_VAPI_PUBLIC_KEY || 'caeb3f2e-e079-4375-a054-bb85cd9443b5');
+    
+    v.on('call-start', () => setCallActive(true));
+    v.on('call-end', () => setCallActive(false));
+    v.on('error', (e) => {
+      console.error('Vapi Error:', e);
+      setCallActive(false);
+    });
+
+    setVapi(v);
+
+    return () => {
+      v.stop();
+    };
+  }, []);
+
+  const handleCall = () => {
+    if (callActive) {
+      vapi?.stop();
+    } else {
+      vapi?.start('be8b97f9-6395-4005-b73f-410f6757f3ce');
+    }
+  };
+
+  if (collapsed) {
+    return (
+      <div className="flex flex-col items-center gap-2 m-2">
+        <button
+          onClick={handleCall}
+          className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+            callActive ? 'bg-[#EF4444] animate-pulse' : 'bg-[#FF6B1A] hover:bg-[#E55A00] shadow-lg shadow-[#FF6B1A]/20'
+          }`}
+          title={callActive ? "End Call" : "Talk to Sarah"}
+        >
+          {callActive ? <Square size={16} fill="white" /> : <Mic size={18} className="text-white" />}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-[#1E1E1E] border-[0.5px] border-[#2A2A2A] rounded-[10px] p-[10px_12px] m-2 flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className={`w-1.5 h-1.5 rounded-full ${callActive ? 'bg-green-500' : 'bg-[#FF6B1A] animate-pulse shadow-[0_0_8px_rgba(255,107,26,0.5)]'}`} />
+          <span className="text-[12px] text-white font-medium">AI Assistant</span>
+        </div>
+        <Mic size={14} className="text-white/40" />
+      </div>
+
+      <div className="flex flex-col items-center justify-center min-h-[24px]">
+        {callActive ? (
+          <span className="text-[10px] text-[var(--text-muted)] font-medium text-center">Connected — Speaking with Sarah</span>
+        ) : (
+          <div className="flex items-center gap-1.5 h-4">
+            <div className="w-1 h-2 bg-[var(--accent)]/30 rounded-full animate-[bounce_1s_infinite]" />
+            <div className="w-1 h-4 bg-[var(--accent)]/50 rounded-full animate-[bounce_1s_infinite_0.2s]" />
+            <div className="w-1 h-2 bg-[var(--accent)]/30 rounded-full animate-[bounce_1s_infinite_0.4s]" />
+          </div>
+        )}
+        {!callActive && <span className="text-[11px] text-[var(--text-muted)] mt-1">Click to talk</span>}
+      </div>
+
+      <button
+        onClick={handleCall}
+        className={`w-full h-8 rounded-[10px] text-[11px] font-bold text-white transition-all duration-300 flex items-center justify-center gap-2 ${
+          callActive ? 'bg-[#EF4444] hover:bg-[#DC2626]' : 'bg-[#FF6B1A] hover:bg-[#E55A00] shadow-lg shadow-[#FF6B1A]/20'
+        }`}
+      >
+        {callActive ? (
+          <><Square size={12} fill="white" /> End Call</>
+        ) : (
+          <><Mic size={12} fill="white" /> Talk to Sarah</>
+        )}
+      </button>
+    </div>
+  );
+};
 
 const DashboardLayout = ({ children, user }) => {
   const { theme, setTheme } = useTheme();
@@ -77,28 +163,13 @@ const DashboardLayout = ({ children, user }) => {
     }, 800);
   };
 
-  // Define all possible agents
-  const AGENT_NAV_ITEMS = [
-    { 
-      id: 'voice-support',
-      name: 'Voice Support', 
-      icon: PhoneCall, 
-      path: '/support-agent'
-    }
-  ];
-
-  // Get provisioned agents from user metadata (default to empty list)
-  const provisionedAgents = user?.user_metadata?.provisioned_agents || [];
-
-  // Filter agents based on what the user has "bought" (provisioned)
-  const userAgents = AGENT_NAV_ITEMS.filter(agent => provisionedAgents.includes(agent.id));
-
   const NAV_ITEMS = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'AI Assistant', path: '/assistant', icon: Sparkles },
-    { name: 'Marketplace', path: '/agents',    icon: Bot },
-    ...userAgents,
+    { name: 'Voice Support', path: '/support-agent', icon: PhoneCall },
+    { name: 'Campaigns', path: '/campaigns', icon: Megaphone },
+    { name: 'Call Logs', path: '/call-logs', icon: Activity },
     { name: 'Contacts',  path: '/contacts',  icon: Users },
+    { name: 'Plans',     path: '/plans',     icon: CreditCard },
     { name: 'Settings',  path: '/settings',  icon: Settings },
   ];
 
@@ -250,6 +321,11 @@ const DashboardLayout = ({ children, user }) => {
             );
           })}
         </nav>
+
+        {/* VOICE ASSISTANT WIDGET */}
+        <div className="transition-all duration-500">
+           <VoiceAssistantWidget collapsed={sidebarCollapsed} />
+        </div>
 
         <div className={`mt-auto border-t border-[var(--border)] transition-all duration-500 ${sidebarCollapsed ? 'p-2' : 'p-4'}`}>
           <div className={`flex items-center rounded-[14px] bg-[var(--bg-card)] border border-[var(--border)] ${sidebarCollapsed ? 'flex-col gap-2 p-2' : 'gap-3 p-3'}`}>

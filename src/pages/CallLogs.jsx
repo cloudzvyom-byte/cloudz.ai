@@ -47,8 +47,8 @@ const CallLogs = () => {
         return {
           id: call.id || index,
           type: isOutbound ? 'Outbound' : 'Inbound',
-          name: call.customer?.name || 'Unknown',
-          number: call.customer?.number || call.phoneCallProviderDetails?.to || 'Unknown',
+          name: call.customer?.name || call.metadata?.customerName || 'Unknown Caller',
+          number: call.customer?.number || (call.type === 'webCall' ? '[Web Call]' : (call.direction === 'inbound' ? call.phoneCallProviderDetails?.from : call.phoneCallProviderDetails?.to)) || 'Unknown',
           status: statusStr,
           response: call.summary || call.analysis?.summary || '-',
           booked: booked ? 'Yes' : 'No',

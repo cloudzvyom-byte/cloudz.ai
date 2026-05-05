@@ -11,7 +11,6 @@ import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Assistant from './pages/Assistant';
-import Marketplace from './pages/Marketplace';
 import Campaigns from './pages/Campaigns';
 import CallLogs from './pages/CallLogs';
 import Meetings from './pages/Meetings';
@@ -129,7 +128,6 @@ function AnimatedRoutes({ session, isBlocked, authLoading }) {
       
       <Route path="/dashboard" element={<ProtectedRoute session={session} isBlocked={isBlocked}><Dashboard /></ProtectedRoute>} />
       <Route path="/assistant" element={<ProtectedRoute session={session} isBlocked={isBlocked}><Assistant /></ProtectedRoute>} />
-      <Route path="/agents"    element={<ProtectedRoute session={session} isBlocked={isBlocked}><Marketplace /></ProtectedRoute>} />
       <Route path="/support-agent" element={<ProtectedRoute session={session} isBlocked={isBlocked}><SupportAgentConfig /></ProtectedRoute>} />
       <Route path="/chat-agent" element={<ProtectedRoute session={session} isBlocked={isBlocked}><ChatAgentConfig /></ProtectedRoute>} />
       <Route path="/campaigns" element={<ProtectedRoute session={session} isBlocked={isBlocked}><Campaigns /></ProtectedRoute>} />

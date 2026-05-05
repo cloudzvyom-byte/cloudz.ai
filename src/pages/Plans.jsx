@@ -5,6 +5,7 @@ import {
   Mail, Zap, Sparkles, TrendingUp,
   ArrowRight, Activity, ShieldCheck
 } from 'lucide-react';
+import PaymentModal from '../components/PaymentModal';
 
 const AGENTS = [
   {
@@ -30,35 +31,13 @@ const AGENTS = [
     comingSoon: true,
     features: ['Zero-Knowledge Auto-Learning', 'Instant Lead Qualification', 'Dynamic Routing Logic', 'Custom JSON Knowledge Base']
   },
-  {
-    id: 'sales-dialer',
-    name: 'Sales Dialer Agent',
-    desc: 'High-velocity outbound dialer with conversion-focused logic.',
-    icon: Headset,
-    color: 'text-orange-400',
-    monthly: 9999,
-    annual: 99990,
-    savings: 19998,
-    comingSoon: true,
-    features: ['Parallel Dialing (up to 5 lines)', 'Automated Objection Handling', 'DNC Compliance Registry', 'Integrated CRM Synchronization']
-  },
-  {
-    id: 'email-outreach',
-    name: 'Cold Outreach Agent',
-    desc: 'Hyper-personalized cold outreach with human-like variability.',
-    icon: Mail,
-    color: 'text-blue-400',
-    monthly: 9999,
-    annual: 99990,
-    savings: 19998,
-    comingSoon: true,
-    features: ['Recursive Follow-up Loops', 'Advanced A/B Growth Testing', 'Spam-Safe Warming Engine', 'Intent-Based Auto-Responses']
-  }
 ];
 
 const Plans = () => {
   const navigate = useNavigate();
   const [billing, setBilling] = useState('monthly');
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(price);
@@ -93,6 +72,12 @@ const Plans = () => {
           </div>
         </div>
       </div>
+
+      <PaymentModal 
+        isOpen={isPaymentModalOpen} 
+        onClose={() => setIsPaymentModalOpen(false)} 
+        plan={selectedPlan} 
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
         {AGENTS.map((agent) => (
@@ -144,10 +129,10 @@ const Plans = () => {
               </div>
             ) : (
               <button 
-                onClick={() => navigate(`/payment?agent=${agent.id}&billing=${billing}`)}
+                onClick={() => window.open('mailto:sales@operon.ai')}
                 className="w-full py-4 rounded-[18px] bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] text-xs font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent)] hover:text-[#0A0A0A] hover:border-[var(--accent)] transition-all flex items-center justify-center gap-2 group/btn shadow-lg"
               >
-                Deploy <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+                Contact Sales <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
               </button>
             )}
           </div>

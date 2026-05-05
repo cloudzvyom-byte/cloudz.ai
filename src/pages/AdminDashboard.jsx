@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import Invoice from '../components/Invoice';
-import { 
-  BarChart3, Users, CreditCard, Shield, 
+import {
+  BarChart3, Users, CreditCard, Shield,
   Settings, Bell, Search, ArrowRight,
   TrendingUp, Activity, PieChart, Database,
   Plus, Send, Layout, Cpu, Trash2, X,
@@ -19,7 +19,7 @@ const AdminDashboard = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [selectedInvoiceData, setSelectedInvoiceData] = useState(null);
-  
+
   const [vapiSettings, setVapiSettings] = useState(() => {
     return JSON.parse(localStorage.getItem('vapi_settings')) || { privateKey: '', assistantId: '', phoneNumberId: '' };
   });
@@ -72,16 +72,16 @@ const AdminDashboard = () => {
 
   const handleNuclearReset = async () => {
     if (window.confirm('CRITICAL: This will erase all platform data permanently. Proceed?')) {
-       setAccountingData([]);
-       setSubscriptionsData([]);
-       setUsersData([]);
-       alert('System Purged. All data vectors at zero.');
+      setAccountingData([]);
+      setSubscriptionsData([]);
+      setUsersData([]);
+      alert('System Purged. All data vectors at zero.');
     }
   };
 
   const handleSaveVapiSettings = async () => {
     localStorage.setItem('vapi_settings', JSON.stringify(vapiSettings));
-    
+
     try {
       const settingsToSave = [
         { key: 'vapi_private_key', value: vapiSettings.privateKey },
@@ -111,9 +111,9 @@ const AdminDashboard = () => {
       const res = await fetch(`https://api.vapi.ai/assistant/${vapiSettings.assistantId}`, {
         headers: { 'Authorization': `Bearer ${vapiSettings.privateKey}` }
       });
-      
+
       const data = await res.json();
-      
+
       if (res.ok) {
         setVapiTestStatus(`✓ Connected — Assistant: ${data.name || 'Neural Agent'}`);
       } else {
@@ -140,7 +140,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white font-sans selection:bg-[var(--accent)] selection:text-[#0A0A0A] overflow-hidden flex">
-      
+
       {selectedInvoiceData && (
         <Invoice data={selectedInvoiceData} onClose={() => setSelectedInvoiceData(null)} />
       )}
@@ -174,7 +174,7 @@ const AdminDashboard = () => {
 
       {/* Admin Content */}
       <main className="flex-1 overflow-y-auto custom-scrollbar p-12 h-screen">
-        
+
         {/* OVERVIEW */}
         {activeTab === 'overview' && (
           <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -183,7 +183,7 @@ const AdminDashboard = () => {
                 <h1 className="text-5xl font-medium tracking-tight">System <span className="text-orange-500">Telemetry</span>.</h1>
                 <p className="text-gray-400 text-lg font-medium">Global platform performance and operational metrics.</p>
               </div>
-              <button 
+              <button
                 onClick={() => handleExportData(accountingData, 'system_telemetry')}
                 className="px-6 py-3 bg-white/5 border border-white/10 rounded-[12px] text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-2"
               >
@@ -232,7 +232,7 @@ const AdminDashboard = () => {
                 <h1 className="text-5xl font-medium tracking-tight">Accounting <span className="text-orange-500">Ledger</span>.</h1>
                 <p className="text-gray-400 text-lg font-medium">Profit and loss analysis per neural node authorization.</p>
               </div>
-              <button 
+              <button
                 onClick={() => handleExportData(accountingData, 'accounting_ledger')}
                 className="px-6 py-3 bg-white/5 border border-white/10 rounded-[12px] text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-2"
               >
@@ -297,7 +297,7 @@ const AdminDashboard = () => {
             <div className="bg-[#141414] border border-white/5 rounded-[24px] overflow-hidden">
               {subscriptionsData.length === 0 ? <EmptyState label="Subscription" /> : (
                 <table className="w-full text-left">
-                   {/* Table structure */}
+                  {/* Table structure */}
                 </table>
               )}
             </div>
@@ -311,7 +311,7 @@ const AdminDashboard = () => {
             <div className="bg-[#141414] border border-white/5 rounded-[24px] overflow-hidden">
               {usersData.length === 0 ? <EmptyState label="User Management" /> : (
                 <table className="w-full text-left">
-                   {/* Table structure */}
+                  {/* Table structure */}
                 </table>
               )}
             </div>
@@ -320,65 +320,65 @@ const AdminDashboard = () => {
 
         {/* BROADCAST */}
         {activeTab === 'broadcast' && (
-           <div className="space-y-12 animate-in fade-in slide-in-from-right-4">
-             <div className="space-y-4 flex justify-between items-end">
-               <h1 className="text-4xl font-medium tracking-tight">Push <span className="text-orange-500">Broadcast</span>.</h1>
-               <button onClick={() => setShowForm(!showForm)} className="px-8 py-4 bg-orange-500 text-black rounded-[12px] text-xs font-black uppercase tracking-widest hover:bg-orange-600 transition-all flex items-center gap-3">
-                 {showForm ? <X size={18} /> : <Plus size={18} />} {showForm ? 'Cancel' : 'New Broadcast'}
-               </button>
-             </div>
-             {showForm ? (
-               <div className="bg-[#141414] border border-white/5 rounded-[32px] p-10 max-w-3xl animate-in slide-in-from-top-4 duration-500">
-                 <form onSubmit={handleCreateNews} className="space-y-8">
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">Broadcast Title</label>
-                      <input required type="text" value={newsForm.title} onChange={e => setNewsForm({...newsForm, title: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" />
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">Cover Image Attachment</label>
-                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/10 rounded-[12px] bg-white/5 hover:bg-white/10 hover:border-orange-500/50 transition-all cursor-pointer group relative overflow-hidden">
-                        {newsForm.image_url ? (
-                          <div className="absolute inset-0 bg-cover bg-center z-10" style={{ backgroundImage: `url(${newsForm.image_url})` }}>
-                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
-                              <span className="text-xs font-black uppercase tracking-widest text-white">Replace Image</span>
-                            </div>
+          <div className="space-y-12 animate-in fade-in slide-in-from-right-4">
+            <div className="space-y-4 flex justify-between items-end">
+              <h1 className="text-4xl font-medium tracking-tight">Push <span className="text-orange-500">Broadcast</span>.</h1>
+              <button onClick={() => setShowForm(!showForm)} className="px-8 py-4 bg-orange-500 text-black rounded-[12px] text-xs font-black uppercase tracking-widest hover:bg-orange-600 transition-all flex items-center gap-3">
+                {showForm ? <X size={18} /> : <Plus size={18} />} {showForm ? 'Cancel' : 'New Broadcast'}
+              </button>
+            </div>
+            {showForm ? (
+              <div className="bg-[#141414] border border-white/5 rounded-[32px] p-10 max-w-3xl animate-in slide-in-from-top-4 duration-500">
+                <form onSubmit={handleCreateNews} className="space-y-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">Broadcast Title</label>
+                    <input required type="text" value={newsForm.title} onChange={e => setNewsForm({ ...newsForm, title: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">Cover Image Attachment</label>
+                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/10 rounded-[12px] bg-white/5 hover:bg-white/10 hover:border-orange-500/50 transition-all cursor-pointer group relative overflow-hidden">
+                      {newsForm.image_url ? (
+                        <div className="absolute inset-0 bg-cover bg-center z-10" style={{ backgroundImage: `url(${newsForm.image_url})` }}>
+                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                            <span className="text-xs font-black uppercase tracking-widest text-white">Replace Image</span>
                           </div>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <ImageIcon size={24} className="text-gray-500 group-hover:text-orange-500 mb-3 transition-colors" />
-                            <p className="mb-2 text-sm text-gray-400"><span className="font-bold text-white">Click to upload</span> or drag and drop</p>
-                            <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">SVG, PNG, JPG (MAX. 5MB)</p>
-                          </div>
-                        )}
-                        <input 
-                          type="file" 
-                          className="hidden" 
-                          accept="image/*"
-                          onChange={(e) => {
-                            if (e.target.files && e.target.files[0]) {
-                              const file = e.target.files[0];
-                              setNewsForm({
-                                ...newsForm, 
-                                image_file: file, 
-                                image_url: URL.createObjectURL(file)
-                              });
-                            }
-                          }} 
-                        />
-                      </label>
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">Article Description</label>
-                      <textarea required rows="4" value={newsForm.description} onChange={e => setNewsForm({...newsForm, description: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none resize-none" />
-                    </div>
-                    <div className="pt-6 flex gap-4">
-                      <button type="submit" disabled={isSubmitting} className="flex-1 py-5 bg-orange-500 text-black rounded-[16px] text-xs font-black uppercase tracking-widest">Authorize Broadcast</button>
-                      <button type="button" onClick={() => setShowForm(false)} className="px-10 py-5 bg-white/5 border border-white/10 text-white rounded-[16px] text-xs font-black uppercase tracking-widest">X</button>
-                    </div>
-                 </form>
-               </div>
-             ) : <EmptyState label="Broadcast" />}
-           </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <ImageIcon size={24} className="text-gray-500 group-hover:text-orange-500 mb-3 transition-colors" />
+                          <p className="mb-2 text-sm text-gray-400"><span className="font-bold text-white">Click to upload</span> or drag and drop</p>
+                          <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">SVG, PNG, JPG (MAX. 5MB)</p>
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            const file = e.target.files[0];
+                            setNewsForm({
+                              ...newsForm,
+                              image_file: file,
+                              image_url: URL.createObjectURL(file)
+                            });
+                          }
+                        }}
+                      />
+                    </label>
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">Article Description</label>
+                    <textarea required rows="4" value={newsForm.description} onChange={e => setNewsForm({ ...newsForm, description: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none resize-none" />
+                  </div>
+                  <div className="pt-6 flex gap-4">
+                    <button type="submit" disabled={isSubmitting} className="flex-1 py-5 bg-orange-500 text-black rounded-[16px] text-xs font-black uppercase tracking-widest">Authorize Broadcast</button>
+                    <button type="button" onClick={() => setShowForm(false)} className="px-10 py-5 bg-white/5 border border-white/10 text-white rounded-[16px] text-xs font-black uppercase tracking-widest">X</button>
+                  </div>
+                </form>
+              </div>
+            ) : <EmptyState label="Broadcast" />}
+          </div>
         )}
 
         {/* VAPI CONFIGURATION */}
@@ -389,21 +389,21 @@ const AdminDashboard = () => {
               <div className="space-y-8">
                 <div className="space-y-3">
                   <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">VAPI Private Key</label>
-                  <input type="password" value={vapiSettings.privateKey} onChange={e => setVapiSettings({...vapiSettings, privateKey: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" placeholder="vapi_xxxxxxxxxxxxxxxx" />
+                  <input type="password" value={vapiSettings.privateKey} onChange={e => setVapiSettings({ ...vapiSettings, privateKey: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" placeholder="vapi_xxxxxxxxxxxxxxxx" />
                 </div>
                 <div className="space-y-3">
                   <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">VAPI Assistant ID</label>
-                  <input type="text" value={vapiSettings.assistantId} onChange={e => setVapiSettings({...vapiSettings, assistantId: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" placeholder="asst_xxxxxxxxxxxxxxxx" />
+                  <input type="text" value={vapiSettings.assistantId} onChange={e => setVapiSettings({ ...vapiSettings, assistantId: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" placeholder="asst_xxxxxxxxxxxxxxxx" />
                 </div>
                 <div className="space-y-3">
                   <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">VAPI Phone Number ID</label>
-                  <input type="text" value={vapiSettings.phoneNumberId} onChange={e => setVapiSettings({...vapiSettings, phoneNumberId: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" placeholder="pn_xxxxxxxxxxxxxxxx" />
+                  <input type="text" value={vapiSettings.phoneNumberId} onChange={e => setVapiSettings({ ...vapiSettings, phoneNumberId: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" placeholder="pn_xxxxxxxxxxxxxxxx" />
                 </div>
                 <div className="pt-6 flex gap-4">
                   <button onClick={handleSaveVapiSettings} className="flex-1 py-5 bg-orange-500 text-black rounded-[16px] text-xs font-black uppercase tracking-widest hover:bg-orange-600 transition-all">Save Configuration</button>
                   <button onClick={testVapiConnection} className="px-10 py-5 bg-white/5 border border-white/10 text-white rounded-[16px] text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all">Test Connection</button>
                 </div>
-                
+
                 {/* Environment Status */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className={`p-3 rounded-[12px] border flex items-center justify-between ${import.meta.env.VITE_VAPI_PRIVATE_KEY ? 'bg-green-500/5 border-green-500/20 text-green-500' : 'bg-red-500/5 border-red-500/20 text-red-500'}`}>
@@ -445,26 +445,26 @@ const AdminDashboard = () => {
                 <div className="space-y-6">
                   <div className="space-y-3">
                     <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">Razorpay Key ID</label>
-                    <input 
-                      type="text" 
-                      value={vapiSettings.razorpayKeyId || ''} 
-                      onChange={e => setVapiSettings({...vapiSettings, razorpayKeyId: e.target.value})} 
-                      className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" 
-                      placeholder="rzp_test_xxxxxxxxxxxxxx" 
+                    <input
+                      type="text"
+                      value={vapiSettings.razorpayKeyId || ''}
+                      onChange={e => setVapiSettings({ ...vapiSettings, razorpayKeyId: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none"
+                      placeholder="rzp_test_xxxxxxxxxxxxxx"
                     />
                   </div>
                   <div className="space-y-3">
                     <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">Razorpay Secret Key</label>
-                    <input 
-                      type="password" 
-                      value={vapiSettings.razorpaySecret || ''} 
-                      onChange={e => setVapiSettings({...vapiSettings, razorpaySecret: e.target.value})} 
-                      className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" 
-                      placeholder="xxxxxxxxxxxxxxxxxxxxxxxx" 
+                    <input
+                      type="password"
+                      value={vapiSettings.razorpaySecret || ''}
+                      onChange={e => setVapiSettings({ ...vapiSettings, razorpaySecret: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none"
+                      placeholder="xxxxxxxxxxxxxxxxxxxxxxxx"
                     />
                   </div>
                   <div className="pt-4">
-                    <button 
+                    <button
                       onClick={handleSaveVapiSettings}
                       className="w-full py-5 bg-orange-500 text-black rounded-[16px] text-xs font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/10"
                     >

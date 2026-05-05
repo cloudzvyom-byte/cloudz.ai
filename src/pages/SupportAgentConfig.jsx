@@ -103,7 +103,7 @@ const SupportAgentConfig = () => {
   }, [calls]);
 
   const handleTestCall = async () => {
-    if (!userAssistantId) return alert('Please deploy your agent first.');
+    if (!userAssistantId) return alert('Agent not active. Please contact support to provision your assistant.');
     if (!testPhone || testPhone.trim().length < 10) {
       return alert('Please enter a valid 10-digit phone number.');
     }
@@ -146,6 +146,7 @@ const SupportAgentConfig = () => {
     link.click();
     document.body.removeChild(link);
   };
+
 
   return (
     <div className="p-8 lg:p-12 max-w-6xl mx-auto space-y-8 h-full overflow-y-auto animate-in fade-in duration-700 custom-scrollbar">
@@ -246,8 +247,10 @@ const SupportAgentConfig = () => {
                     return (
                       <tr key={call.id} className="hover:bg-white/5 transition-all">
                         <td className="px-6 py-4 text-xs text-[var(--text-muted)]">{calls.length - index}</td>
-                        <td className="px-6 py-4 text-xs font-medium text-[var(--text-primary)]">{call.customer?.name || 'Unknown'}</td>
-                        <td className="px-6 py-4 text-xs text-[var(--text-secondary)]">{call.customer?.number || '--'}</td>
+                        <td className="px-6 py-4 text-xs font-medium text-[var(--text-primary)]">{call.customer?.name || call.metadata?.customerName || 'Unknown Caller'}</td>
+                        <td className="px-6 py-4 text-xs text-[var(--text-secondary)]">
+                          {call.customer?.number || (call.type === 'webCall' ? 'Web Interface' : (call.phoneCallProviderDetails?.from || '--'))}
+                        </td>
                         <td className="px-6 py-4">
                           <span className="text-[10px] font-bold uppercase tracking-tighter text-[var(--text-muted)]">{call.status}</span>
                         </td>
