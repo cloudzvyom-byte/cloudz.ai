@@ -178,8 +178,6 @@ const DashboardLayout = ({ children, user }) => {
     { name: 'Voice Support', path: '/support-agent', icon: PhoneCall },
     { name: 'Campaigns', path: '/campaigns', icon: Megaphone },
     { name: 'Call Logs', path: '/call-logs', icon: Activity },
-    { name: 'Contacts',  path: '/contacts',  icon: Users },
-    { name: 'Plans',     path: '/plans',     icon: CreditCard },
     { name: 'Settings',  path: '/settings',  icon: Settings },
   ];
 
