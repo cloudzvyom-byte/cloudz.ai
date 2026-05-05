@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -36,32 +36,42 @@ export const OperonLogo = ({ size = 28 }) => (
   </div>
 );
 
+class VoiceWidgetErrorBoundary extends React.Component {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(err) { console.error('VoiceWidget crashed:', err); }
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}
+
 const VoiceAssistantWidget = ({ collapsed }) => {
   const [callActive, setCallActive] = useState(false);
-  const [vapi, setVapi] = useState(null);
+  const [vapiRef, setVapiRef] = useState(null);
 
-  React.useEffect(() => {
-    const v = new Vapi(import.meta.env.VITE_VAPI_PUBLIC_KEY || 'caeb3f2e-e079-4375-a054-bb85cd9443b5');
-    
-    v.on('call-start', () => setCallActive(true));
-    v.on('call-end', () => setCallActive(false));
-    v.on('error', (e) => {
-      console.error('Vapi Error:', e);
-      setCallActive(false);
-    });
-
-    setVapi(v);
-
+  useEffect(() => {
+    let v = null;
+    try {
+      const VapiSDK = Vapi;
+      v = new VapiSDK(import.meta.env.VITE_VAPI_PUBLIC_KEY || 'caeb3f2e-e079-4375-a054-bb85cd9443b5');
+      v.on('call-start', () => setCallActive(true));
+      v.on('call-end', () => setCallActive(false));
+      v.on('error', (e) => { console.error('Vapi Error:', e); setCallActive(false); });
+      setVapiRef(v);
+    } catch (err) {
+      console.error('Vapi init failed:', err);
+    }
     return () => {
-      v.stop();
+      try { if (v) v.stop(); } catch(_) {}
     };
   }, []);
 
   const handleCall = () => {
     if (callActive) {
-      vapi?.stop();
+      vapiRef?.stop();
     } else {
-      vapi?.start('be8b97f9-6395-4005-b73f-410f6757f3ce');
+      vapiRef?.start('be8b97f9-6395-4005-b73f-410f6757f3ce');
     }
   };
 
@@ -324,7 +334,9 @@ const DashboardLayout = ({ children, user }) => {
 
         {/* VOICE ASSISTANT WIDGET */}
         <div className="transition-all duration-500">
-           <VoiceAssistantWidget collapsed={sidebarCollapsed} />
+           <VoiceWidgetErrorBoundary>
+             <VoiceAssistantWidget collapsed={sidebarCollapsed} />
+           </VoiceWidgetErrorBoundary>
         </div>
 
         <div className={`mt-auto border-t border-[var(--border)] transition-all duration-500 ${sidebarCollapsed ? 'p-2' : 'p-4'}`}>
