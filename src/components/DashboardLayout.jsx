@@ -84,8 +84,6 @@ const DashboardLayout = ({ children, user }) => {
   const NAV_ITEMS = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Voice Support', path: '/support-agent', icon: PhoneCall },
-    { name: 'Campaigns', path: '/campaigns', icon: Megaphone },
-    { name: 'Call Logs', path: '/call-logs', icon: Activity },
     { name: 'Settings',  path: '/settings',  icon: Settings },
   ];
 
