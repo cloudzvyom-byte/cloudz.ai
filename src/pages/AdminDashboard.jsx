@@ -399,6 +399,39 @@ const AdminDashboard = () => {
                   <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">VAPI Phone Number ID</label>
                   <input type="text" value={vapiSettings.phoneNumberId} onChange={e => setVapiSettings({ ...vapiSettings, phoneNumberId: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm focus:outline-none" placeholder="pn_xxxxxxxxxxxxxxxx" />
                 </div>
+                
+                <div className="space-y-3 border-t border-white/5 pt-6 mt-6">
+                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-1">GLOBAL MAX CALL DURATION (MINUTES)</label>
+                  <p className="text-[12px] text-gray-400 px-1 mb-2">Automatically end all calls through this assistant after a specific duration to control AI generation costs.</p>
+                  <div className="flex gap-4 items-center">
+                    <select 
+                      className="w-full bg-white/5 border border-white/10 rounded-[12px] px-6 py-4 text-sm text-white focus:outline-none"
+                      onChange={async (e) => {
+                        const val = parseInt(e.target.value);
+                        if(!val) return;
+                        if(vapiSettings.assistantId && vapiSettings.privateKey) {
+                          try {
+                            const { updateVapiAssistant } = await import('../lib/vapi');
+                            // Temporarily set privateKey in local storage or use it if available globally
+                            await updateVapiAssistant({ maxDurationSeconds: val }, vapiSettings.assistantId);
+                            alert(`Global call limit successfully updated to ${val / 60} minutes for assistant ${vapiSettings.assistantId}.`);
+                          } catch (err) {
+                            alert('Failed to update call limit: ' + err.message);
+                          }
+                        } else {
+                          alert('Please enter and save your Assistant ID and Private Key first.');
+                        }
+                      }}
+                    >
+                      <option value="">Select Global Limit</option>
+                      <option value="120">2 Minutes</option>
+                      <option value="300">5 Minutes</option>
+                      <option value="600">10 Minutes</option>
+                      <option value="900">15 Minutes</option>
+                      <option value="1800">30 Minutes</option>
+                    </select>
+                  </div>
+                </div>
                 <div className="pt-6 flex gap-4">
                   <button onClick={handleSaveVapiSettings} className="flex-1 py-5 bg-orange-500 text-black rounded-[16px] text-xs font-black uppercase tracking-widest hover:bg-orange-600 transition-all">Save Configuration</button>
                   <button onClick={testVapiConnection} className="px-10 py-5 bg-white/5 border border-white/10 text-white rounded-[16px] text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all">Test Connection</button>
