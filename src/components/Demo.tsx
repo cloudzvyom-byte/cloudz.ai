@@ -37,7 +37,7 @@ export function Demo() {
           <div className="absolute inset-0">
             <iframe 
               src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-              title="Operon AI Demo"
+              title="Cloudz AI Demo"
               className="w-full h-full border-none"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen

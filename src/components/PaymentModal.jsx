@@ -119,7 +119,7 @@ const PaymentModal = ({ isOpen, onClose, plan }) => {
                 alt="UPI QR Code"
                 className="w-[180px] h-[180px] object-contain"
                 onError={(e) => {
-                  e.target.src = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=8482967644@fam%26pn=Operon%26am=" + (plan.priceNum || plan.monthly);
+                  e.target.src = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi://pay?pa=8482967644@fam%26pn=Cloudz%26am=" + (plan.priceNum || plan.monthly);
                 }}
               />
             </div>

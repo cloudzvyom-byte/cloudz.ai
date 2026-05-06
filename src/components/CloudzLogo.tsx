@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function OperonLogo({ className = "w-8 h-8", ...props }: React.SVGProps<SVGSVGElement>) {
+export function CloudzLogo({ className = "w-8 h-8", ...props }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg 
       viewBox="0 0 100 100" 

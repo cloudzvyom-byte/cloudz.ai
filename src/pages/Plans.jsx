@@ -129,7 +129,7 @@ const Plans = () => {
               </div>
             ) : (
               <button 
-                onClick={() => window.open('mailto:sales@operon.ai')}
+                onClick={() => window.open('mailto:sales@cloudz.ai')}
                 className="w-full py-4 rounded-[18px] bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] text-xs font-bold uppercase tracking-[0.2em] hover:bg-[var(--accent)] hover:text-[#0A0A0A] hover:border-[var(--accent)] transition-all flex items-center justify-center gap-2 group/btn shadow-lg"
               >
                 Contact Sales <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />

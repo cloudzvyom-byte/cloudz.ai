@@ -17,7 +17,7 @@ export default function Security() {
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-8">Security Policy</h1>
           <div className="prose prose-sm md:prose-base text-gray-700 leading-relaxed space-y-6">
             <p className="font-medium text-[var(--text-primary)]">Last Updated: 30 April 2026</p>
-            <p>At Operon, security is a top priority. We are committed to protecting our platform, users, and data.</p>
+            <p>At Cloudz, security is a top priority. We are committed to protecting our platform, users, and data.</p>
             
             <section>
               <h2 className="text-xl font-bold text-[var(--text-primary)] mb-3">1. Infrastructure Security</h2>

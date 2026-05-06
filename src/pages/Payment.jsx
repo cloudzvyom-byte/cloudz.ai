@@ -88,7 +88,7 @@ const Payment = () => {
       key: razorpayKey, 
       amount: finalPrice * 100,
       currency: "INR",
-      name: "Operon AI",
+      name: "Cloudz AI",
       description: type === 'topup' ? `Credit Top-up: ${selectedBundle.name}` : `Subscription: ${agent.name}`,
       handler: async function(response) {
         try {
@@ -299,7 +299,7 @@ const Payment = () => {
           <div className="p-6 bg-[var(--accent-tint)] border border-[var(--accent)]/10 rounded-[20px] flex items-start gap-4">
             <Lock size={16} className="text-[var(--accent)] mt-1 flex-shrink-0" />
             <p className="text-[10px] text-[var(--accent)] font-medium leading-relaxed uppercase tracking-wider">
-              AUTHORIZED BY OPERON NEURAL SYSTEM v4.0.2
+              AUTHORIZED BY CLOUDZ NEURAL SYSTEM v4.0.2
             </p>
           </div>
         </div>

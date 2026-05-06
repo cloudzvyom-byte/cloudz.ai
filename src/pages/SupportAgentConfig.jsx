@@ -280,6 +280,48 @@ const SupportAgentConfig = () => {
           </div>
         </div>
       </div>
+      {/* CALL LIMITS / SETTINGS */}
+      <div className="bg-[var(--bg-card)] rounded-[12px] border-[0.5px] border-[var(--border)] p-6 space-y-6 shadow-sm">
+        <div className="flex justify-between items-center">
+          <h2 className="text-[18px] text-[var(--text-primary)] font-medium">Agent Limits & Controls</h2>
+        </div>
+        <div className="border-b-[0.5px] border-[var(--border)]" />
+        
+        <div className="space-y-3">
+          <label className="text-[10px] text-[var(--text-muted)] font-black uppercase tracking-widest">MAX CALL DURATION</label>
+          <p className="text-[12px] text-[var(--text-secondary)]">Automatically end calls after a specific duration to control costs.</p>
+          
+          <div className="flex gap-4 items-center">
+             <select 
+                className="bg-black/20 border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] outline-none"
+                onChange={async (e) => {
+                  const val = parseInt(e.target.value);
+                  if(!val) return;
+                  if(userAssistantId) {
+                    try {
+                      // Using the import we already have: updateVapiAssistant might not be imported, let's check
+                      const { updateVapiAssistant } = await import('../lib/vapi');
+                      await updateVapiAssistant({ maxDurationSeconds: val }, userAssistantId);
+                      alert(`Call limit successfully updated to ${val / 60} minutes.`);
+                    } catch (err) {
+                      alert('Failed to update call limit: ' + err.message);
+                    }
+                  } else {
+                    alert('No active assistant found to update.');
+                  }
+                }}
+             >
+                <option value="">Select Limit</option>
+                <option value="120">2 Minutes</option>
+                <option value="300">5 Minutes</option>
+                <option value="600">10 Minutes</option>
+                <option value="900">15 Minutes</option>
+                <option value="1800">30 Minutes</option>
+             </select>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };

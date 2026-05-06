@@ -63,7 +63,7 @@ const Onboarding = () => {
                 <input
                   type="text"
                   required
-                  placeholder="E.G. OPERON REALTY HUB"
+                  placeholder="E.G. CLOUDZ REALTY HUB"
                   className="w-full bg-[var(--bg-input)] border-2 border-[var(--border)] rounded-[28px] px-8 py-6 text-lg focus:border-[var(--accent)] transition-all outline-none text-white font-medium placeholder-[var(--text-muted)] shadow-inner"
                   value={formData.workspace_name}
                   onChange={(e) => setFormData({ ...formData, workspace_name: e.target.value })}

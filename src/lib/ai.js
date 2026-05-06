@@ -9,7 +9,7 @@ export const getGroqResponse = async (messages, workspaceData) => {
     throw new Error('Groq API Key is missing or invalid.');
   }
 
-  const name = workspaceData?.workspace_name || 'Operon AI';
+  const name = workspaceData?.workspace_name || 'Cloudz AI';
   const city = workspaceData?.city || 'the cloud';
   const industry = workspaceData?.industry || 'Technology';
 

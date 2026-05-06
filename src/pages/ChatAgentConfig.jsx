@@ -17,9 +17,9 @@ const ChatAgentConfig = () => {
   const [showWaQr, setShowWaQr] = useState(false);
 
   const [config, setConfig] = useState({
-    name: 'Operon AI Support',
+    name: 'Cloudz AI Support',
     greeting: 'Hello! How can I help you today?',
-    prompt: 'You are a helpful chat support agent for Operon. Use the knowledge base to answer questions.',
+    prompt: 'You are a helpful chat support agent for Cloudz. Use the knowledge base to answer questions.',
     primaryColor: '#FF6B1A',
     position: 'bottom-right'
   });
@@ -130,9 +130,9 @@ const ChatAgentConfig = () => {
   };
 
   const embedCode = `
-<script src="https://cdn.operon.ai/widget.js"></script>
+<script src="https://cdn.cloudz.ai/widget.js"></script>
 <script>
-  window.OperonChat.init({
+  window.CloudzChat.init({
     agentId: "agt_12345",
     color: "${config.primaryColor}",
     position: "${config.position}"
@@ -247,8 +247,8 @@ const ChatAgentConfig = () => {
 
                 <div className="mt-8 p-6 bg-[var(--bg-input)] border border-[var(--border)] rounded-[20px] flex items-center justify-between">
                   <div>
-                    <h4 className="text-[var(--text-primary)] font-medium mb-1">Remove Operon Branding</h4>
-                    <p className="text-[var(--text-muted)] text-sm">Enterprise feature: hide "Powered by Operon AI" watermark.</p>
+                    <h4 className="text-[var(--text-primary)] font-medium mb-1">Remove Cloudz Branding</h4>
+                    <p className="text-[var(--text-muted)] text-sm">Enterprise feature: hide "Powered by Cloudz AI" watermark.</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer opacity-50">
                     <input type="checkbox" className="sr-only peer" disabled />
@@ -292,7 +292,7 @@ const ChatAgentConfig = () => {
                   <div className="flex gap-4">
                     <input 
                       readOnly 
-                      value={`https://api.operon.ai/webhooks/whatsapp/${userAssistantId || 'PROVISION_FIRST'}`} 
+                      value={`https://api.cloudz.ai/webhooks/whatsapp/${userAssistantId || 'PROVISION_FIRST'}`} 
                       className="flex-1 bg-black/40 border border-white/5 rounded-[12px] px-4 py-3 text-[var(--accent)] font-mono text-[10px] outline-none" 
                     />
                     <button className="px-6 py-3 bg-white/5 border border-white/10 rounded-[12px] text-[10px] font-black uppercase tracking-widest hover:bg-white/10">Copy</button>

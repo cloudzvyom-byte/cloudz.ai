@@ -15,8 +15,8 @@ import {
 import Vapi from '@vapi-ai/web';
 
 
-/* ─── Operon Logo ────────────────────────────────────────────────── */
-export const OperonLogo = ({ size = 28 }) => (
+/* ─── Cloudz Logo ────────────────────────────────────────────────── */
+export const CloudzLogo = ({ size = 28 }) => (
   <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_8px_rgba(255,107,26,0.3)]">
       <defs>
@@ -146,7 +146,7 @@ const DashboardLayout = ({ children, user }) => {
       <aside className={`flex-shrink-0 bg-[var(--bg-sidebar)] border-r border-[var(--border)] flex flex-col h-full z-20 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] overflow-hidden ${sidebarCollapsed ? 'w-[80px]' : 'w-[240px]'}`}>
         <div className={`py-10 transition-all duration-500 ${sidebarCollapsed ? 'px-0 flex justify-center' : 'px-8'}`}>
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/dashboard')}>
-            <OperonLogo size={24} />
+            <CloudzLogo size={24} />
             {!sidebarCollapsed && (
               <span className="text-lg font-bold tracking-tight text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors whitespace-nowrap">Cloud AI</span>
             )}

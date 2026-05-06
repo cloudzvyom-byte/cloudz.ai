@@ -4,13 +4,13 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('operon_theme') || 'white-cherry';
+    return localStorage.getItem('cloudz_theme') || 'white-cherry';
   });
 
   useEffect(() => {
     const root = window.document.documentElement;
     root.setAttribute('data-theme', theme);
-    localStorage.setItem('operon_theme', theme);
+    localStorage.setItem('cloudz_theme', theme);
   }, [theme]);
 
   return (

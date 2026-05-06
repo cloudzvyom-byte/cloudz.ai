@@ -17,7 +17,7 @@ export default function Privacy() {
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-8">Privacy Policy</h1>
           <div className="prose prose-sm md:prose-base text-gray-700 leading-relaxed space-y-6">
             <p className="font-medium text-black">Last Updated: April 30, 2026</p>
-            <p>At Operon (formerly Clouds), we value your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you use our AI-powered services.</p>
+            <p>At Cloudz (formerly Clouds), we value your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you use our AI-powered services.</p>
             
             <section>
               <h2 className="text-xl font-bold text-black mb-3">1. Information We Collect</h2>

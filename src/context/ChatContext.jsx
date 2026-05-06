@@ -9,8 +9,8 @@ export const useChatContext = () => {
   return ctx;
 };
 
-const LS_PROJECTS = (uid) => `operon_projects_${uid}`;
-const LS_CHATS    = (uid) => `operon_chats_${uid}`;
+const LS_PROJECTS = (uid) => `cloudz_projects_${uid}`;
+const LS_CHATS    = (uid) => `cloudz_chats_${uid}`;
 
 export const ChatProvider = ({ userId, children }) => {
   const [projects,    setProjects]    = useState([]);

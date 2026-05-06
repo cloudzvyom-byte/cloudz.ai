@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { OperonLogo } from "./OperonLogo";
+import { CloudzLogo } from "./CloudzLogo";
 
 const nav = [
   { label: "Product", href: "#product" },
@@ -32,7 +32,7 @@ export function Header() {
             className="flex items-center transition-transform hover:scale-105" 
             aria-label="Clouds home"
           >
-            <OperonLogo className="h-10 w-10 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
+            <CloudzLogo className="h-10 w-10 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
           </Link>
           <nav className="hidden items-center gap-6 md:flex ml-4">
             {nav.map((n) => (

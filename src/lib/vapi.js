@@ -155,11 +155,13 @@ export const triggerSupportCall = async (customerPhone, customerName, assistantI
     body: JSON.stringify({
       assistantId: settings.assistantId,
       phoneNumberId: settings.phoneNumberId,
+      maxDurationSeconds: 300, // Limit call to 5 minutes
       customer: {
         number: formatPhone(customerPhone),
         name: customerName || 'Customer'
       },
       assistantOverrides: {
+        maxDurationSeconds: 300, // Ensure it applies to the assistant level too
         variableValues: {
           customerName: customerName || 'Customer',
           agentRole: 'Customer Support'

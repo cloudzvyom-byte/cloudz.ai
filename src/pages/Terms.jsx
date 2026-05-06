@@ -17,7 +17,7 @@ export default function Terms() {
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-8">Terms & Conditions</h1>
           <div className="prose prose-sm md:prose-base text-gray-700 leading-relaxed space-y-6">
             <p className="font-medium text-black">Last Updated: 30 April 2026</p>
-            <p>Welcome to Operon (formerly Clouds). By using our AI agent services, you agree to the following terms.</p>
+            <p>Welcome to Cloudz (formerly Clouds). By using our AI agent services, you agree to the following terms.</p>
             
             <section>
               <h2 className="text-xl font-bold text-black mb-3">1. Use of Services</h2>
@@ -48,7 +48,7 @@ export default function Terms() {
             
             <section>
               <h2 className="text-xl font-bold text-black mb-3">4. Intellectual Property</h2>
-              <p>All platform content, including AI models, design, and branding, belongs to Operon AI Inc.</p>
+              <p>All platform content, including AI models, design, and branding, belongs to Cloudz AI Inc.</p>
             </section>
             
             <section>

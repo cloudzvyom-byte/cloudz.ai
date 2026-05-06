@@ -138,7 +138,7 @@ function AnimatedRoutes({ session, isBlocked, authLoading }) {
       <Route path="/payment"   element={<ProtectedRoute session={session} isBlocked={isBlocked}><Payment /></ProtectedRoute>} />
       
       {/* Secret Admin Route */}
-      <Route path="/admin-secure-operon-x9k2" element={<AdminDashboard />} />
+      <Route path="/admin-secure-cloudz-x9k2" element={<AdminDashboard />} />
       
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
