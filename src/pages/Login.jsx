@@ -23,9 +23,7 @@ const Login = () => {
       
       if (signInError) {
         if (signInError.message.includes('Invalid login credentials')) {
-          const { error: signUpError } = await supabase.auth.signUp({ email, password });
-          if (signUpError) throw signUpError;
-          alert('Sign up successful! Please check your email to verify.');
+          throw new Error('New to cloudz? Signup to create ur account');
         } else {
           throw signInError;
         }

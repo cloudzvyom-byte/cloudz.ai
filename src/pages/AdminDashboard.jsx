@@ -24,10 +24,57 @@ const AdminDashboard = () => {
     return JSON.parse(localStorage.getItem('vapi_settings')) || { privateKey: '', assistantId: '', phoneNumberId: '' };
   });
   const [vapiTestStatus, setVapiTestStatus] = useState(null);
-  // DATA RESET TO ZERO
   const [accountingData, setAccountingData] = useState([]);
   const [subscriptionsData, setSubscriptionsData] = useState([]);
   const [usersData, setUsersData] = useState([]);
+
+  useEffect(() => {
+    fetchAdminData();
+  }, []);
+
+  const fetchAdminData = async () => {
+    try {
+      const { data: profiles, error } = await supabase.from('profiles').select('*');
+      if (profiles) {
+        setUsersData(profiles);
+        setSubscriptionsData(profiles);
+      }
+    } catch (err) {
+      console.error('Error fetching admin data:', err);
+    }
+  };
+
+  const handleUpdateSubscription = async (userId, action) => {
+    try {
+      let updates = {};
+      if (action === 'shutoff') {
+        updates = { subscription_status: 'expired', purchased_agents: [] };
+      } else if (action === 'renew') {
+        const nextMonth = new Date();
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        updates = { subscription_status: 'active', plan_expiry: nextMonth.toISOString() };
+      }
+
+      await supabase.from('profiles').update(updates).eq('id', userId);
+      fetchAdminData();
+      alert(`User subscription updated (${action}).`);
+    } catch (err) {
+      alert('Error updating subscription: ' + err.message);
+    }
+  };
+
+  const handleUpdateQuotas = async (userId, minutes, calls) => {
+    try {
+      await supabase.from('profiles').update({
+        monthly_minutes_limit: minutes,
+        monthly_calls_limit: calls
+      }).eq('id', userId);
+      fetchAdminData();
+      alert('User quotas updated.');
+    } catch (err) {
+      alert('Error updating quotas: ' + err.message);
+    }
+  };
 
   const tabs = [
     { id: 'overview', name: 'System Overview', icon: Layout },
@@ -297,7 +344,46 @@ const AdminDashboard = () => {
             <div className="bg-[#141414] border border-white/5 rounded-[24px] overflow-hidden">
               {subscriptionsData.length === 0 ? <EmptyState label="Subscription" /> : (
                 <table className="w-full text-left">
-                  {/* Table structure */}
+                  <thead className="bg-white/5 border-b border-white/5">
+                    <tr>
+                      <th className="px-8 py-5 text-[9px] font-black text-gray-500 uppercase tracking-widest">User / Email</th>
+                      <th className="px-8 py-5 text-[9px] font-black text-gray-500 uppercase tracking-widest">Status</th>
+                      <th className="px-8 py-5 text-[9px] font-black text-gray-500 uppercase tracking-widest">Expiry Date</th>
+                      <th className="px-8 py-5 text-[9px] font-black text-gray-500 uppercase tracking-widest">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {subscriptionsData.map(user => (
+                      <tr key={user.id} className="hover:bg-white/5 transition-colors">
+                        <td className="px-8 py-5">
+                          <p className="text-sm font-medium">{user.username || user.email || user.id}</p>
+                          <p className="text-[10px] text-gray-500">{user.email}</p>
+                        </td>
+                        <td className="px-8 py-5">
+                          <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${user.subscription_status === 'expired' ? 'bg-red-500/10 text-red-500' : 'bg-green-500/10 text-green-500'}`}>
+                            {user.subscription_status || 'Active'}
+                          </span>
+                        </td>
+                        <td className="px-8 py-5 text-sm">
+                          {user.plan_expiry ? new Date(user.plan_expiry).toLocaleDateString() : 'N/A'}
+                        </td>
+                        <td className="px-8 py-5 flex gap-3">
+                          <button 
+                            onClick={() => handleUpdateSubscription(user.id, 'renew')}
+                            className="px-4 py-2 bg-green-500/10 text-green-500 rounded-[8px] text-[10px] font-black uppercase tracking-widest hover:bg-green-500/20 transition-all flex items-center gap-2"
+                          >
+                            <CheckCircle2 size={14} /> Renew
+                          </button>
+                          <button 
+                            onClick={() => handleUpdateSubscription(user.id, 'shutoff')}
+                            className="px-4 py-2 bg-red-500/10 text-red-500 rounded-[8px] text-[10px] font-black uppercase tracking-widest hover:bg-red-500/20 transition-all flex items-center gap-2"
+                          >
+                            <Ban size={14} /> Shut Off
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               )}
             </div>
@@ -311,7 +397,51 @@ const AdminDashboard = () => {
             <div className="bg-[#141414] border border-white/5 rounded-[24px] overflow-hidden">
               {usersData.length === 0 ? <EmptyState label="User Management" /> : (
                 <table className="w-full text-left">
-                  {/* Table structure */}
+                  <thead className="bg-white/5 border-b border-white/5">
+                    <tr>
+                      <th className="px-8 py-5 text-[9px] font-black text-gray-500 uppercase tracking-widest">User</th>
+                      <th className="px-8 py-5 text-[9px] font-black text-gray-500 uppercase tracking-widest">Minutes Limit</th>
+                      <th className="px-8 py-5 text-[9px] font-black text-gray-500 uppercase tracking-widest">Calls Limit</th>
+                      <th className="px-8 py-5 text-[9px] font-black text-gray-500 uppercase tracking-widest">Update Quotas</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {usersData.map(user => (
+                      <tr key={user.id} className="hover:bg-white/5 transition-colors">
+                        <td className="px-8 py-5">
+                          <p className="text-sm font-medium">{user.username || user.email || user.id}</p>
+                        </td>
+                        <td className="px-8 py-5">
+                          <input 
+                            type="number" 
+                            defaultValue={user.monthly_minutes_limit || 100}
+                            id={`min_${user.id}`}
+                            className="w-24 bg-white/5 border border-white/10 rounded-[8px] px-3 py-2 text-xs focus:outline-none focus:border-orange-500"
+                          />
+                        </td>
+                        <td className="px-8 py-5">
+                          <input 
+                            type="number" 
+                            defaultValue={user.monthly_calls_limit || 1000}
+                            id={`cal_${user.id}`}
+                            className="w-24 bg-white/5 border border-white/10 rounded-[8px] px-3 py-2 text-xs focus:outline-none focus:border-orange-500"
+                          />
+                        </td>
+                        <td className="px-8 py-5">
+                          <button 
+                            onClick={() => {
+                              const min = parseInt(document.getElementById(`min_${user.id}`).value);
+                              const cal = parseInt(document.getElementById(`cal_${user.id}`).value);
+                              handleUpdateQuotas(user.id, min, cal);
+                            }}
+                            className="px-4 py-2 bg-orange-500 text-black rounded-[8px] text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-all flex items-center gap-2"
+                          >
+                            <Settings size={14} /> Save Limits
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               )}
             </div>
